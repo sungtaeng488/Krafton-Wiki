@@ -1,0 +1,220 @@
+/* 전체 페이지 */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #222;
+}
+
+
+/* 헤더 */
+header {
+    padding: 20px 40px;
+    background-color: white;
+    border-bottom: 1px solid #ddd;
+}
+
+header h1 {
+    margin: 0 0 15px;
+}
+
+nav {
+    display: flex;
+    gap: 20px;
+}
+
+nav a {
+    color: #222;
+    text-decoration: none;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+
+/* 메인 영역 */
+main {
+    width: 900px;
+    max-width: calc(100% - 40px);
+    margin: 40px auto;
+}
+
+
+/* 각 영역 */
+section {
+    margin-bottom: 30px;
+    padding: 25px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+section h2 {
+    margin-top: 0;
+}
+
+
+/* 구분선 */
+hr {
+    border: 0;
+    border-top: 1px solid #ddd;
+}
+
+
+/* 키워드 정보 */
+#keyword-info h1 {
+    font-size: 48px;
+}
+
+#keyword-info h2 {
+    font-size: 28px;
+}
+
+#keyword-info p {
+    line-height: 1.6;
+}
+
+
+/* 답변 작성 */
+#answer-content {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px;
+
+    font-size: 15px;
+    line-height: 1.5;
+
+    border: 1px solid #ccc;
+    border-radius: 6px;
+
+    resize: vertical;
+}
+
+
+/* 버튼 공통 */
+button {
+    padding: 8px 14px;
+
+    background-color: white;
+
+    border: 1px solid #aaa;
+    border-radius: 5px;
+
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #eeeeee;
+}
+
+
+/* 답변 등록 버튼 */
+#answer-submit {
+    margin-top: 10px;
+}
+
+
+/* 답변 등록 메시지 */
+#answer-message {
+    margin-top: 10px;
+}
+
+
+/* 답변 카드 */
+article {
+    padding: 20px 0;
+}
+
+article:first-of-type {
+    padding-top: 5px;
+}
+
+article:last-of-type {
+    padding-bottom: 5px;
+}
+
+article h3 {
+    margin-top: 0;
+}
+
+
+/* 답변 내용 */
+article p {
+    line-height: 1.6;
+}
+
+
+/* 평점 */
+select {
+    padding: 7px;
+    margin-left: 5px;
+    margin-right: 5px;
+
+    border: 1px solid #aaa;
+    border-radius: 5px;
+}
+
+
+/* Best / Top 3 */
+#top-answers article {
+    padding: 20px;
+    margin-bottom: 15px;
+
+    background-color: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+
+/* 다른 사용자 답변 */
+#answer-list article {
+    padding: 20px;
+
+    background-color: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+
+    margin-bottom: 15px;
+}
+
+
+/* 퀴즈 링크 */
+#quiz-link a {
+    display: inline-block;
+
+    padding: 10px 16px;
+
+    color: #222;
+    text-decoration: none;
+
+    border: 1px solid #aaa;
+    border-radius: 5px;
+}
+
+#quiz-link a:hover {
+    background-color: #eeeeee;
+}
+
+
+/* 작은 화면 */
+@media (max-width: 600px) {
+
+    header {
+        padding: 20px;
+    }
+
+    nav {
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    main {
+        margin: 20px auto;
+    }
+
+    section {
+        padding: 20px;
+    }
+}
