@@ -1,1 +1,1 @@
-# Krafton-Wiki-
+# Krafton-Wiki
