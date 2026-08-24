@@ -1,17 +1,27 @@
-/* 전체 페이지 */
+/* =========================
+   전체 페이지
+========================= */
+
 body {
     margin: 0;
     padding: 0;
+
     font-family: Arial, sans-serif;
+
     background-color: #f5f5f5;
     color: #222;
 }
 
 
-/* 헤더 */
+/* =========================
+   헤더
+========================= */
+
 header {
     padding: 20px 40px;
+
     background-color: white;
+
     border-bottom: 1px solid #ddd;
 }
 
@@ -34,19 +44,28 @@ nav a:hover {
 }
 
 
-/* 메인 영역 */
+/* =========================
+   메인
+========================= */
+
 main {
     width: 900px;
     max-width: calc(100% - 40px);
+
     margin: 40px auto;
 }
 
 
-/* 각 영역 */
+/* =========================
+   Section
+========================= */
+
 section {
     margin-bottom: 30px;
     padding: 25px;
+
     background-color: white;
+
     border: 1px solid #ddd;
     border-radius: 8px;
 }
@@ -56,15 +75,13 @@ section h2 {
 }
 
 
-/* 구분선 */
-hr {
-    border: 0;
-    border-top: 1px solid #ddd;
-}
+/* =========================
+   키워드 정보
+========================= */
 
-
-/* 키워드 정보 */
 #keyword-info h1 {
+    margin-top: 0;
+
     font-size: 48px;
 }
 
@@ -77,10 +94,15 @@ hr {
 }
 
 
-/* 답변 작성 */
+/* =========================
+   답변 작성
+========================= */
+
 #answer-content {
     width: 100%;
+
     box-sizing: border-box;
+
     padding: 12px;
 
     font-size: 15px;
@@ -93,7 +115,10 @@ hr {
 }
 
 
-/* 버튼 공통 */
+/* =========================
+   버튼
+========================= */
+
 button {
     padding: 8px 14px;
 
@@ -106,87 +131,136 @@ button {
 }
 
 button:hover {
-    background-color: #eeeeee;
+    background-color: #eee;
 }
 
 
 /* 답변 등록 버튼 */
+
 #answer-submit {
     margin-top: 10px;
 }
 
 
 /* 답변 등록 메시지 */
+
 #answer-message {
     margin-top: 10px;
 }
 
 
-/* 답변 카드 */
+/* =========================
+   답변 카드
+========================= */
+
 article {
-    padding: 20px 0;
-}
+    padding: 20px;
 
-article:first-of-type {
-    padding-top: 5px;
-}
+    margin-bottom: 15px;
 
-article:last-of-type {
-    padding-bottom: 5px;
+    background-color: #fafafa;
+
+    border: 1px solid #ddd;
+    border-radius: 6px;
 }
 
 article h3 {
     margin-top: 0;
 }
 
-
-/* 답변 내용 */
 article p {
     line-height: 1.6;
 }
 
 
-/* 평점 */
-select {
-    padding: 7px;
-    margin-left: 5px;
-    margin-right: 5px;
+/* =========================
+   좋아요 / 싫어요
+========================= */
 
-    border: 1px solid #aaa;
-    border-radius: 5px;
+.answer-actions {
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 15px;
 }
 
 
-/* Best / Top 3 */
-#top-answers article {
-    padding: 20px;
-    margin-bottom: 15px;
+/* =========================
+   별점
+========================= */
 
-    background-color: #fafafa;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+.rating {
+    margin-top: 20px;
+}
+
+.rating-label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    font-weight: bold;
+}
+
+.stars {
+    display: flex;
+
+    gap: 4px;
 }
 
 
-/* 다른 사용자 답변 */
-#answer-list article {
-    padding: 20px;
+/* 별점 버튼 */
 
-    background-color: #fafafa;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+.star {
+    padding: 0;
 
-    margin-bottom: 15px;
+    border: none;
+
+    background: none;
+
+    font-size: 30px;
+
+    color: #ccc;
+
+    cursor: pointer;
+}
+
+.star:hover {
+    background: none;
 }
 
 
-/* 퀴즈 링크 */
+/* 선택된 별 */
+
+.star.active {
+    color: #f5b301;
+}
+
+
+/* 결과 텍스트 */
+
+.rating-result {
+    display: block;
+
+    margin-top: 8px;
+
+    font-size: 14px;
+
+    color: #666;
+}
+
+
+/* =========================
+   퀴즈
+========================= */
+
 #quiz-link a {
     display: inline-block;
 
     padding: 10px 16px;
 
     color: #222;
+
     text-decoration: none;
 
     border: 1px solid #aaa;
@@ -194,11 +268,14 @@ select {
 }
 
 #quiz-link a:hover {
-    background-color: #eeeeee;
+    background-color: #eee;
 }
 
 
-/* 작은 화면 */
+/* =========================
+   모바일
+========================= */
+
 @media (max-width: 600px) {
 
     header {
@@ -207,6 +284,7 @@ select {
 
     nav {
         gap: 12px;
+
         flex-wrap: wrap;
     }
 
@@ -216,5 +294,9 @@ select {
 
     section {
         padding: 20px;
+    }
+
+    #keyword-info h1 {
+        font-size: 36px;
     }
 }
