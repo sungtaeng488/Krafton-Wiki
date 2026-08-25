@@ -3,10 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Krafton Wiki</title>
+    <meta name="description" content="함께 기록하고 성장하는 CS 지식 커뮤니티, KRAFTON WIKI">
+    <title>KRAFTON WIKI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
-    <h1>Krafton Wiki</h1>
-    <p>정글러가 함께 완성하는 CS 베이스캠프</p>
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="brand" href="/" aria-label="KRAFTON WIKI 홈">
+                <span>KRAFTON WIKI</span>
+            </a>
+
+            <div class="header-actions">
+                <button class="icon-button" type="button" aria-label="검색">
+                    <span class="search-icon" aria-hidden="true"></span>
+                </button>
+                <button class="login-button" type="button">로그인</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-shell">
+        <section class="intro" aria-labelledby="page-title">
+            <h1 id="page-title">함께 채워가는 CS 지식</h1>
+            <p>개념을 정리하고, 경험을 나누며, 서로의 지식을 연결해 보세요.</p>
+        </section>
+
+        <section class="discovery" aria-label="콘텐츠 탐색">
+            <div class="sort-row">
+                <nav class="sort-tabs" aria-label="콘텐츠 정렬">
+                    <button class="sort-tab is-active" type="button" data-sort="trending" aria-pressed="true">트렌딩</button>
+                    <button class="sort-tab" type="button" data-sort="views" aria-pressed="false">조회수 순</button>
+                    <button class="sort-tab" type="button" data-sort="likes" aria-pressed="false">좋아요 순</button>
+                    <button class="sort-tab" type="button" data-sort="latest" aria-pressed="false">최신순</button>
+                </nav>
+            </div>
+
+
+        </section>
+
+        <section class="content-grid" aria-label="CS 지식 콘텐츠 목록">
+            {% for post in posts %}
+            <div
+                class="card"
+                data-id="{{ post.id }}"
+                data-likes="{{ post.likes }}"
+                data-views="{{ post.views }}"
+                data-views-24h="{{ post.views_24h }}"
+                data-date="{{ post.created_at.isoformat() }}"
+            >
+                <div class="card-body">
+                    <h2 class="card-title">{{ post.title }}</h2>
+                    <p class="card-summary">{{ post.summary }}</p>
+                </div>
+                <div class="card-footer">
+                    <div class="author-info">
+                        <strong>by {{ post.author }}</strong>
+                        <small>{{ post.created_at }}</small>
+                    </div>
+                    <div class="card-stats">
+                        <span>👍 {{ post.likes }}</span>
+                        <span>👁️ {{ post.views }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>

@@ -11,10 +11,13 @@ from pymongo import MongoClient
 from pymongo.errors import DuplicateKeyError
 from werkzeug.security import check_password_hash, generate_password_hash
 
+from routes.main import main_bp
 
 load_dotenv()
 
 app = Flask(__name__)
+app.register_blueprint(main_bp)
+
 app.config["JWT_SECRET_KEY"] = os.environ.get(
     "JWT_SECRET_KEY", "development-only-secret-change-before-deploy"
 )
