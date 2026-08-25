@@ -1,0 +1,12 @@
+"""Application route blueprints."""
+from .main import main_bp
+from .write import write_bp
+from .search import search_bp
+from .post import post_bp
+
+all_blueprints = [
+    main_bp, 
+    write_bp, 
+    search_bp, 
+    post_bp
+]

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+    {% include 'navigation_bar.html' %}
+
+    <main class="page-shell">
+        <section class="intro" aria-labelledby="page-title">
+            <h1 id="page-title">함께 채워가는 CS 지식</h1>
+            <p>개념을 정리하고, 경험을 나누며, 서로의 지식을 연결해 보세요.</p>
+        </section>
+
+        <section class="discovery" aria-label="콘텐츠 탐색">
+            <div class="sort-row">
+                <nav class="sort-tabs" aria-label="콘텐츠 정렬">
+                    <button class="sort-tab is-active" type="button" data-sort="trending" aria-pressed="true">트렌딩</button>
+                    <button class="sort-tab" type="button" data-sort="views" aria-pressed="false">조회수 순</button>
+                    <button class="sort-tab" type="button" data-sort="likes" aria-pressed="false">좋아요 순</button>
+                    <button class="sort-tab" type="button" data-sort="latest" aria-pressed="false">최신순</button>
+                </nav>
+            </div>
+
+
+        </section>
+
+        <section class="content-grid" aria-label="CS 지식 콘텐츠 목록">
+            {% for post in posts %}
+            <div
+                class="card"
+                data-id="{{ post.id }}"
+                data-likes="{{ post.likes }}"
+                data-views="{{ post.views }}"
+                data-views-24h="{{ post.views_24h }}"
+                data-date="{{ post.get('created_at', '') }}"
+            >
+                <div class="card-body">
+                    <h2 class="card-title">{{ post.title }}</h2>
+                    <p class="card-summary">{{ post.summary }}</p>
+                </div>
+                <div class="card-footer">
+                    <div class="author-info">
+                        <strong>by {{ post.author }}</strong>
+                        <small>{{ post.created_at }}</small>
+                    </div>
+                    <div class="card-stats">
+                        <span>👍 {{ post.likes }}</span>
+                        <span>👁️ {{ post.views }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
