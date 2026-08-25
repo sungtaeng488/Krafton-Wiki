@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>회원가입</title>
+</head>
+<body>
+  <h1>회원가입</h1>
+
+  {% if error %}
+    <p style="color: red;">{{ error }}</p>
+  {% endif %}
+
+  <form method="POST" action="{{ url_for('signup') }}">
+    <input
+      type="text"
+      name="id_give"
+      placeholder="아이디"
+      required
+    >
+
+    <br>
+
+    <input
+      type="password"
+      name="password_give"
+      placeholder="비밀번호"
+      required
+    >
+
+    <br>
+
+    <button type="submit">회원가입</button>
+  </form>
+
+  <p><a href="{{ url_for('login') }}">로그인</a></p>
+</body>
+</html>
