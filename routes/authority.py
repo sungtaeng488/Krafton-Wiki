@@ -13,19 +13,14 @@ from flask import (
     request,
     url_for,
 )
-from pymongo import MongoClient
 from pymongo.errors import DuplicateKeyError
 from werkzeug.security import check_password_hash, generate_password_hash
+
+from data.database import users_collection
 
 
 # 인증 관련 라우트를 담는 Blueprint
 auth_bp = Blueprint("auth", __name__)
-
-# client = MongoClient("mongodb://test:test@localhost", 27017)
-client = MongoClient("localhost", 27017)
-db = client.krafton_wiki
-users_collection = db.users
-users_collection.create_index("user_id", unique=True)
 
 
 def load_user_id():
