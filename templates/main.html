@@ -32,10 +32,10 @@
         <section class="discovery" aria-label="콘텐츠 탐색">
             <div class="sort-row">
                 <nav class="sort-tabs" aria-label="콘텐츠 정렬">
-                    <button class="sort-tab is-active" type="button" aria-pressed="true">트렌딩</button>
-                    <button class="sort-tab" type="button" aria-pressed="false">실시간 인기</button>
-                    <button class="sort-tab" type="button" aria-pressed="false">좋아요 순</button>
-                    <button class="sort-tab" type="button" aria-pressed="false">최신순</button>
+                    <button class="sort-tab is-active" type="button" data-sort="trending" aria-pressed="true">트렌딩</button>
+                    <button class="sort-tab" type="button" data-sort="views" aria-pressed="false">조회수 순</button>
+                    <button class="sort-tab" type="button" data-sort="likes" aria-pressed="false">좋아요 순</button>
+                    <button class="sort-tab" type="button" data-sort="latest" aria-pressed="false">최신순</button>
                 </nav>
             </div>
 
@@ -44,19 +44,26 @@
 
         <section class="content-grid" aria-label="CS 지식 콘텐츠 목록">
             {% for post in posts %}
-            <div class="card">
+            <div
+                class="card"
+                data-id="{{ post.id }}"
+                data-likes="{{ post.likes }}"
+                data-views="{{ post.views }}"
+                data-views-24h="{{ post.views_24h }}"
+                data-date="{{ post.created_at.isoformat() }}"
+            >
                 <div class="card-body">
                     <h2 class="card-title">{{ post.title }}</h2>
                     <p class="card-summary">{{ post.summary }}</p>
                 </div>
                 <div class="card-footer">
                     <div class="author-info">
-                        <strong>by{{ post.author }}</strong>
+                        <strong>by {{ post.author }}</strong>
                         <small>{{ post.created_at }}</small>
                     </div>
                     <div class="card-stats">
                         <span>👍 {{ post.likes }}</span>
-                        <span>👁️{{ post.views }}</span>
+                        <span>👁️ {{ post.views }}</span>
                     </div>
                 </div>
             </div>
