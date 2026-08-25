@@ -6,7 +6,6 @@
 
     <hr>
 
-    <h2>글 검색 결과</h2>
     {% if posts %}
         <ul>
         {% for post in posts %}
@@ -31,8 +30,6 @@
             </li>
         {% endfor %}
         </ul>
-    {% else %}
-        <p>조건에 맞는 글이 없습니다.</p>
     {% endif %}
 
     <hr>
