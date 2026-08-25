@@ -1,16 +1,18 @@
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
 from flask import Blueprint, render_template, url_for
 
-from data.mock_posts import MOCK_POSTS
+from db import get_database
 
 
 main_bp = Blueprint("main", __name__)
+SEOUL_TIMEZONE = ZoneInfo("Asia/Seoul")
 
 SORT_KEYS = {
-    "trending": lambda post: post["views_24h"] + post["likes"] * 3,
-    "views": lambda post: post["views"],
-    "likes": lambda post: post["likes"],
+    "trending": lambda post: post.get("views_24h", 0) + post.get("likes", 0) * 3,
+    "views": lambda post: post.get("views", 0),
+    "likes": lambda post: post.get("likes", 0),
     "latest": lambda post: post["created_at"],
 }
 
@@ -22,8 +24,16 @@ PERIOD_LABELS = {
 }
 
 
+def as_seoul_datetime(value):
+    if value.tzinfo is None:
+        return value.replace(tzinfo=SEOUL_TIMEZONE)
+
+    return value.astimezone(SEOUL_TIMEZONE)
+
+
 def get_relative_time(created_at):
-    now = datetime.now()
+    created_at = as_seoul_datetime(created_at)
+    now = datetime.now(SEOUL_TIMEZONE)
 
     if created_at.date() == now.date():
         seconds = max((now - created_at).total_seconds(), 0)
@@ -37,37 +47,51 @@ def get_relative_time(created_at):
     return f"{created_at.year}년 {created_at.month}월 {created_at.day}일"
 
 
-def filter_posts(period):
-    today = datetime.now().date()
+def load_posts():
+    return list(
+        get_database()["posts"].find(
+            {"status": "published"},
+            {"_id": 0},
+        )
+    )
+
+
+def filter_posts(posts, period):
+    today = datetime.now(SEOUL_TIMEZONE).date()
+
+    def created_date(post):
+        return as_seoul_datetime(post["created_at"]).date()
 
     if period == "today":
-        return [post for post in MOCK_POSTS if post["created_at"].date() == today]
+        return [post for post in posts if created_date(post) == today]
 
     if period == "week":
         week_start = today - timedelta(days=today.weekday())
-        return [post for post in MOCK_POSTS if post["created_at"].date() >= week_start]
+        return [post for post in posts if created_date(post) >= week_start]
     if period == "month":
         return [
             post
-            for post in MOCK_POSTS
-            if post["created_at"].year == today.year
-            and post["created_at"].month == today.month
+            for post in posts
+            if created_date(post).year == today.year
+            and created_date(post).month == today.month
         ]
 
     if period == "year":
-        return [
-            post for post in MOCK_POSTS if post["created_at"].year == today.year
-        ]
+        return [post for post in posts if created_date(post).year == today.year]
 
     return []
 
 
 def get_sorted_posts(sort_type, period):
-    filtered_posts = filter_posts(period)
+    filtered_posts = filter_posts(load_posts(), period)
     sorted_posts = sorted(filtered_posts, key=SORT_KEYS[sort_type], reverse=True)
 
     return [
-        {**post, "relative_time": get_relative_time(post["created_at"])}
+        {
+            **post,
+            "created_at": as_seoul_datetime(post["created_at"]),
+            "relative_time": get_relative_time(post["created_at"]),
+        }
         for post in sorted_posts
     ]
 
