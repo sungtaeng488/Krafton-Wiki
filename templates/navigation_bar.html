@@ -20,8 +20,14 @@
                 </button>
             {% endif %}
     
-                <!-- 로그인 버튼: 클릭 시 login.html로 이동 -->
-                <button class="login-button" type="button" onclick="location.href='login'">로그인</button>
+                {% if load_user_id %}
+                    <a class="login-button" href="{{ url_for('mypage.mypage') }}">마이페이지</a>
+                    <form class="logout-form" method="POST" action="{{ url_for('auth.logout') }}">
+                        <button class="logout-button" type="submit">로그아웃</button>
+                    </form>
+                {% else %}
+                    <a class="login-button" href="{{ url_for('auth.login') }}">로그인</a>
+                {% endif %}
             </div>
         </div>
     </header>
