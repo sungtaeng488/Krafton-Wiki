@@ -39,6 +39,12 @@ button {
     top: 0;
     z-index: 20;
     background: #ffffff;
+    will-change: transform;
+    transition: transform 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.site-header.is-hidden {
+    transform: translateY(-100%);
 }
 
 .header-inner,
@@ -165,6 +171,10 @@ button {
 }
 
 .sort-row {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
     border-bottom: 1px solid var(--line);
 }
 
@@ -172,7 +182,9 @@ button {
     --indicator-x: 0px;
     --indicator-width: 0px;
     position: relative;
+    min-width: 0;
     display: flex;
+    flex: 1;
     gap: 30px;
     overflow-x: auto;
     scrollbar-width: none;
@@ -213,6 +225,7 @@ button {
     color: #818995;
     font-size: 15px;
     font-weight: 700;
+    text-decoration: none;
     cursor: pointer;
     transition: color 160ms ease;
 }
@@ -222,10 +235,103 @@ button {
     color: var(--text);
 }
 
+.period-filter {
+    position: relative;
+    flex: 0 0 auto;
+    margin-bottom: 8px;
+}
+
+.period-filter summary {
+    min-width: 104px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 0 13px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--surface);
+    color: #4f5660;
+    font-size: 13px;
+    font-weight: 700;
+    list-style: none;
+    cursor: pointer;
+    box-shadow: 0 3px 10px rgba(29, 42, 62, 0.05);
+}
+
+.period-filter summary::-webkit-details-marker {
+    display: none;
+}
+
+.period-arrow {
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid #7b828c;
+    border-bottom: 2px solid #7b828c;
+    transform: translateY(-2px) rotate(45deg);
+    transition: transform 160ms ease;
+}
+
+.period-filter[open] .period-arrow {
+    transform: translateY(2px) rotate(225deg);
+}
+
+.period-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 30;
+    width: 150px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: var(--surface);
+    box-shadow: 0 14px 34px rgba(29, 42, 62, 0.14);
+}
+
+.period-option {
+    display: block;
+    padding: 13px 16px;
+    border-bottom: 1px solid #edf0f3;
+    color: #555d67;
+    font-size: 13px;
+    font-weight: 650;
+    text-decoration: none;
+    transition: background-color 140ms ease, color 140ms ease;
+}
+
+.period-option:last-child {
+    border-bottom: 0;
+}
+
+.period-option:hover {
+    background: #f6f7f9;
+    color: var(--text);
+}
+
+.period-option.is-active {
+    background: #f2f5f9;
+    color: var(--text);
+    font-weight: 800;
+}
+
 .content-grid {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 28px 20px;
+    transition: opacity 180ms ease, transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.content-grid.is-updating {
+    opacity: 0.45;
+    transform: translateY(6px);
+    pointer-events: none;
+}
+
+.content-grid.is-entering {
+    opacity: 0;
+    transform: translateY(8px);
 }
 
 .card {
@@ -247,8 +353,10 @@ button {
 
 .card-body {
     flex: 1;
-    min-height: 210px;
+    min-height: 340px;
     padding: 32px 28px 28px;
+    display: flex;
+    flex-direction: column;
 }
 
 .card-title {
@@ -264,12 +372,48 @@ button {
     display: -webkit-box;
     margin: 0;
     overflow: hidden;
-    color: var(--muted);
+    color: #4f5660;
     font-size: 15px;
-    line-height: 1.72;
+    font-weight: 650;
+    line-height: 1.65;
     letter-spacing: -0.015em;
     -webkit-box-orient: vertical;
-    -webkit-line-clamp: 3;
+    -webkit-line-clamp: 2;
+}
+
+.card-content-preview {
+    display: -webkit-box;
+    margin: 18px 0 0;
+    overflow: hidden;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.72;
+    letter-spacing: -0.01em;
+    white-space: normal;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+}
+
+.card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 20px;
+    color: #9299a3;
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+.card-meta span {
+    color: #727a85;
+    font-weight: 650;
+}
+
+.card-meta span::before {
+    content: "·";
+    margin-right: 8px;
+    color: #b4bac2;
 }
 
 .card-footer {
@@ -388,7 +532,7 @@ a:focus-visible {
     }
 
     .card-body {
-        min-height: 180px;
+        min-height: 300px;
         padding: 26px 22px 24px;
     }
 

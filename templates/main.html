@@ -32,34 +32,67 @@
         <section class="discovery" aria-label="콘텐츠 탐색">
             <div class="sort-row">
                 <nav class="sort-tabs" aria-label="콘텐츠 정렬">
-                    <button class="sort-tab is-active" type="button" data-sort="trending" aria-pressed="true">트렌딩</button>
-                    <button class="sort-tab" type="button" data-sort="views" aria-pressed="false">조회수 순</button>
-                    <button class="sort-tab" type="button" data-sort="likes" aria-pressed="false">좋아요 순</button>
-                    <button class="sort-tab" type="button" data-sort="latest" aria-pressed="false">최신순</button>
+                    <a
+                        class="sort-tab{% if current_sort == 'trending' %} is-active{% endif %}"
+                        href="{{ sort_urls['trending'] }}"
+                        {% if current_sort == 'trending' %}aria-current="page"{% endif %}
+                    >트렌딩</a>
+                    <a
+                        class="sort-tab{% if current_sort == 'views' %} is-active{% endif %}"
+                        href="{{ sort_urls['views'] }}"
+                        {% if current_sort == 'views' %}aria-current="page"{% endif %}
+                    >조회수 순</a>
+                    <a
+                        class="sort-tab{% if current_sort == 'likes' %} is-active{% endif %}"
+                        href="{{ sort_urls['likes'] }}"
+                        {% if current_sort == 'likes' %}aria-current="page"{% endif %}
+                    >좋아요 순</a>
+                    <a
+                        class="sort-tab{% if current_sort == 'latest' %} is-active{% endif %}"
+                        href="{{ sort_urls['latest'] }}"
+                        {% if current_sort == 'latest' %}aria-current="page"{% endif %}
+                    >최신순</a>
                 </nav>
+                <details class="period-filter">
+                    <summary>
+                        <span>{{ period_labels[current_period] }}</span>
+                        <span class="period-arrow" aria-hidden="true"></span>
+                    </summary>
+                    <nav class="period-menu" aria-label="콘텐츠 기간">
+                        {% for period, label in period_labels.items() %}
+                        <a
+                            class="period-option{% if current_period == period %} is-active{% endif %}"
+                            href="{{ period_urls[period] }}"
+                            {% if current_period == period %}aria-current="page"{% endif %}
+                        >{{ label }}</a>
+                        {% endfor %}
+                    </nav>
+                </details>
             </div>
 
 
         </section>
 
-        <section class="content-grid" aria-label="CS 지식 콘텐츠 목록">
+        <section
+            id="content-grid"
+            class="content-grid"
+            aria-label="CS 지식 콘텐츠 목록"
+            aria-live="polite"
+        >
             {% for post in posts %}
-            <div
-                class="card"
-                data-id="{{ post.id }}"
-                data-likes="{{ post.likes }}"
-                data-views="{{ post.views }}"
-                data-views-24h="{{ post.views_24h }}"
-                data-date="{{ post.created_at.isoformat() }}"
-            >
+            <div class="card">
                 <div class="card-body">
                     <h2 class="card-title">{{ post.title }}</h2>
                     <p class="card-summary">{{ post.summary }}</p>
+                    <p class="card-content-preview">{{ post.content | trim }}</p>
+                    <div class="card-meta">
+                        <time datetime="{{ post.created_at.isoformat() }}">{{ post.relative_time }}</time>
+                        <span>💬 {{ post.comments }}</span>
+                    </div>
                 </div>
                 <div class="card-footer">
                     <div class="author-info">
                         <strong>by {{ post.author }}</strong>
-                        <small>{{ post.created_at }}</small>
                     </div>
                     <div class="card-stats">
                         <span>👍 {{ post.likes }}</span>
