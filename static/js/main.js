@@ -184,6 +184,27 @@ document.addEventListener("DOMContentLoaded", () => {
         replaceMainContent(nextUrl.href);
     });
 
+    document.addEventListener("click", (event) => {
+        document.querySelectorAll(".period-filter[open]").forEach((filter) => {
+            if (!filter.contains(event.target)) {
+                filter.removeAttribute("open");
+            }
+        });
+    });
+
+    document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape") {
+            return;
+        }
+
+        const openFilter = document.querySelector(".period-filter[open]");
+
+        if (openFilter) {
+            openFilter.removeAttribute("open");
+            openFilter.querySelector("summary")?.focus();
+        }
+    });
+
     window.addEventListener("popstate", () => {
         replaceMainContent(window.location.href, false);
     });
