@@ -1,0 +1,27 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="함께 기록하고 성장하는 CS 지식 커뮤니티, KRAFTON WIKI">
+    <title>KRAFTON WIKI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <a class="brand" href="/" aria-label="KRAFTON WIKI 홈">
+                <span>KRAFTON WIKI</span>
+            </a>
+
+            <div class="header-actions">
+                <!-- 검색 버튼: 클릭 시 search.html로 이동 -->
+                {% if not hide_search %}
+                <button class="icon-button" type="button" aria-label="검색" onclick="location.href='search'">
+                    <span class="search-icon" aria-hidden="true"></span>
+                </button>
+            {% endif %}
+    
+                <!-- 로그인 버튼: 클릭 시 login.html로 이동 -->
+                <button class="login-button" type="button" onclick="location.href='login'">로그인</button>
+            </div>
+        </div>
+    </header>

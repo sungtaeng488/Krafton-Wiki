@@ -1,27 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="함께 기록하고 성장하는 CS 지식 커뮤니티, KRAFTON WIKI">
-    <title>KRAFTON WIKI</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-</head>
-<body>
-    <header class="site-header">
-        <div class="header-inner">
-            <a class="brand" href="/" aria-label="KRAFTON WIKI 홈">
-                <span>KRAFTON WIKI</span>
-            </a>
 
-            <div class="header-actions">
-                <button class="icon-button" type="button" aria-label="검색">
-                    <span class="search-icon" aria-hidden="true"></span>
-                </button>
-                <button class="login-button" type="button">로그인</button>
-            </div>
-        </div>
-    </header>
+    {% include 'navigation_bar.html' %}
 
     <main class="page-shell">
         <section class="intro" aria-labelledby="page-title">
@@ -50,7 +30,7 @@
                 data-likes="{{ post.likes }}"
                 data-views="{{ post.views }}"
                 data-views-24h="{{ post.views_24h }}"
-                data-date="{{ post.created_at.isoformat() }}"
+                data-date="{{ post.get('created_at', '') }}"
             >
                 <div class="card-body">
                     <h2 class="card-title">{{ post.title }}</h2>
