@@ -6,6 +6,7 @@ from flask import Flask
 
 from routes.authority import auth_bp
 from routes.main import main_bp
+from routes.mypage import mypage_bp
 
 load_dotenv()
 
@@ -22,6 +23,7 @@ app.config["JWT_COOKIE_SECURE"] = (
 
 app.register_blueprint(main_bp)
 app.register_blueprint(auth_bp)
+app.register_blueprint(mypage_bp)
 
 if __name__ == "__main__":
     app.run(debug=True)

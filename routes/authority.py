@@ -156,7 +156,4 @@ def logout():
     return response
 
 
-@auth_bp.route("/mypage")
-@login_required
-def mypage():
-    return render_template("mypage.html", user_id=g.user_id)
+
