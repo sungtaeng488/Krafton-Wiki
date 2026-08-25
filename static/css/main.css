@@ -353,7 +353,7 @@ button {
 
 .card-body {
     flex: 1;
-    min-height: 340px;
+    min-height: 300px;
     padding: 32px 28px 28px;
     display: flex;
     flex-direction: column;
@@ -383,7 +383,7 @@ button {
 
 .card-content-preview {
     display: -webkit-box;
-    margin: 18px 0 0;
+    margin: 10px 0 0;
     overflow: hidden;
     color: var(--muted);
     font-size: 13px;
@@ -399,7 +399,7 @@ button {
     align-items: center;
     gap: 8px;
     margin-top: auto;
-    padding-top: 20px;
+    padding-top: 12px;
     color: #9299a3;
     font-size: 11px;
     line-height: 1.45;
@@ -532,7 +532,7 @@ a:focus-visible {
     }
 
     .card-body {
-        min-height: 300px;
+        min-height: 280px;
         padding: 26px 22px 24px;
     }
 
