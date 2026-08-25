@@ -19,12 +19,12 @@
                     <span class="search-icon" aria-hidden="true"></span>
                 </button>
                 {% if load_user_id %}
-                    <a class="login-button" href="{{ url_for('mypage') }}">마이페이지</a>
-                    <form class="logout-form" method="POST" action="{{ url_for('logout') }}">
+                    <a class="login-button" href="{{ url_for('auth.mypage') }}">마이페이지</a>
+                    <form class="logout-form" method="POST" action="{{ url_for('auth.logout') }}">
                         <button class="logout-button" type="submit">로그아웃</button>
                     </form>
                 {% else %}
-                    <a class="login-button" href="{{ url_for('login') }}">로그인</a>
+                    <a class="login-button" href="{{ url_for('auth.login') }}">로그인</a>
                 {% endif %}
             </div>
         </div>
