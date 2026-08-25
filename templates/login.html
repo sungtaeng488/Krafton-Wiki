@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>로그인</title>
+</head>
+<body>
+  <h1>로그인</h1>
+
+  {% if error %}
+    <p style="color: red;">{{ error }}</p>
+  {% endif %}
+
+  {% if registered %}
+    <p style="color: green;">회원가입이 완료되었습니다. 로그인해주세요.</p>
+  {% endif %}
+
+  <form method="POST" action="{{ url_for('auth.login') }}">
+    <input
+      type="text"
+      name="id_give"
+      placeholder="아이디"
+      required
+    >
+
+    <br>
+
+    <input
+      type="password"
+      name="password_give"
+      placeholder="비밀번호"
+      required
+    >
+
+    <br>
+
+    <button type="submit">로그인</button>
+  </form>
+
+  <p><a href="{{ url_for('auth.signup') }}">회원가입</a></p>
+  <p><a href="{{ url_for('main.index') }}">메인페이지</a></p>
+</body>
+</html>

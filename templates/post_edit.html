@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+    <!-- 테스트를 위해 임시로 만든 HTML -->
+  <title>글 수정</title>
+</head>
+<body>
+  <h1>글 수정</h1>
+
+  {% if error %}
+    <p style="color: red;">{{ error }}</p>
+  {% endif %}
+
+  <form method="POST" action="{{ url_for('mypage.update_post', post_id=post._id) }}">
+    <p>
+      <label>
+        제목
+        <input type="text" name="title_give" value="{{ post.title }}" required>
+      </label>
+    </p>
+
+    <p>
+      <label>
+        내용
+        <textarea name="content_give" rows="10" cols="60" required>{{ post.content }}</textarea>
+      </label>
+    </p>
+
+    <button type="submit">수정 완료</button>
+  </form>
+
+  <p><a href="{{ url_for('mypage.mypage') }}">마이페이지로 돌아가기</a></p>
+</body>
+</html>
