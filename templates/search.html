@@ -92,7 +92,12 @@
                     <div class="card-footer">
                         <div class="author-info">
                             <span class="by-text">by</span>
-                            <strong>{{ post.author }}</strong>
+                            <span
+                                onclick="event.preventDefault(); window.location.href='{{ url_for('someonepage.someonepage', other_user_id=post.user_id or post.author) }}';" 
+                                style="text-decoration: none; color: inherit;"
+                            >
+                                <strong>{{ post.author }}</strong>
+                            </span>
                         </div>
                         <div class="card-stats">
                             <span class="card-like-stat">
