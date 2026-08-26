@@ -1,6 +1,7 @@
 from db.collections import (
     ensure_database_indexes,
     get_post_histories_collection,
+    get_post_view_events_collection,
     get_posts_collection,
     get_users_collection,
 )
@@ -13,6 +14,7 @@ __all__ = (
     "get_database",
     "get_mongo_client",
     "get_post_histories_collection",
+    "get_post_view_events_collection",
     "get_posts_collection",
     "get_users_collection",
 )

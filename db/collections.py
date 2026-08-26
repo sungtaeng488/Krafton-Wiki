@@ -13,6 +13,10 @@ def get_post_histories_collection():
     return get_database()["post_histories"]
 
 
+def get_post_view_events_collection():
+    return get_database()["post_view_events"]
+
+
 def ensure_database_indexes():
     get_users_collection().create_index(
         "user_id",

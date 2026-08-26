@@ -12,6 +12,7 @@ from flask import (
     redirect,
     render_template,
     request,
+    session,
     url_for,
 )
 from pymongo import ReturnDocument
@@ -22,6 +23,7 @@ from db.post_history import (
     get_post_history,
     list_post_histories,
 )
+from db.post_views import record_post_view
 from routes.authority import login_required
 
 
@@ -90,6 +92,18 @@ def normalize_comments(posts, post):
     return normalized, len(normalized)
 
 
+def get_viewer_key():
+    if g.user_id:
+        return f"user:{g.user_id}"
+
+    anonymous_id = session.get("anonymous_viewer_id")
+    if not anonymous_id:
+        anonymous_id = uuid4().hex
+        session["anonymous_viewer_id"] = anonymous_id
+
+    return f"anonymous:{anonymous_id}"
+
+
 @post_bp.route("/post/<id>")
 def view_post(id):
     object_id = parse_post_id(id)
@@ -101,6 +115,8 @@ def view_post(id):
     )
     if not post:
         abort(404)
+
+    record_post_view(object_id, get_viewer_key())
 
     post["comments"], post["comment_count"] = normalize_comments(posts, post)
     post["owner_id"] = post.get("user_id") or post.get("author")
