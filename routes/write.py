@@ -9,6 +9,8 @@ from db import get_posts_collection
 from db.post_history import ensure_initial_post_history, save_post_history
 from routes.authority import login_required
 
+import re
+
 write_bp = Blueprint("write", __name__)
 
 
@@ -16,13 +18,10 @@ write_bp = Blueprint("write", __name__)
 
 # post 데이터 추출 함수
 def get_post_form_data():
-    #tag #기준으로 분류후 양옆 띄어쓰기 제거
+    
     raw_tags = request.form.get('tags', '')
-    tags_list = []
-    for t in raw_tags.split('#'):
-        stripped_t = t.strip()
-        if stripped_t:
-            tags_list.append(stripped_t)
+    #정규표현식으로 태그 분리
+    tags_list = re.findall(r'#(\w+(?:#(?!\w)|\+\+)?)', raw_tags)
 
     now = datetime.now(timezone.utc)
     author = g.user_id
@@ -42,11 +41,6 @@ def get_post_form_data():
 def write():
     if request.method == 'POST':
         form_data = get_post_form_data()
-
-        # 태그칸에#만 쓰고 넘기면
-        if len(form_data['tags']) == 0:
-            flash('태그를 입력해주세요. (예: #1#2)')
-            return render_template('write.html', post=form_data)
 
         form_data.update(
             {
