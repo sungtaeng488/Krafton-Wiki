@@ -31,6 +31,10 @@
                     <label for="title">제목</label>
                     <input type="text" id="title" name="title" value="{{ post.title if post else '' }}" placeholder="글 제목을 입력하세요" required>
                 </div>
+                <div class="field">
+                    <label for="summary">한줄요약</label>
+                    <input type="text" id="summary" name="summary" value="{{ post.summary if post else '' }}" placeholder="글의 핵심 내용을 한 줄로 요약해 주세요.">
+                </div>
 
                 <div class="field">
                     <label for="content">내용</label>
@@ -42,10 +46,7 @@
                     <input type="text" id="tags" name="tags" value="{{ post.tags_str if post else '' }}" placeholder="예: #quicksort #algorithm" required>
                 </div>
 
-                <div class="field">
-                    <label for="summary">한줄요약</label>
-                    <input type="text" id="summary" name="summary" value="{{ post.summary if post else '' }}" placeholder="글의 핵심 내용을 한 줄로 요약해 주세요.">
-                </div>
+                
 
                 <div class="form-actions">
                     <button class="btn-cancel" type="button" onclick="location.href='{% if post %}{{ url_for('post.view_post', id=post._id) }}{% else %}{{ url_for('main.index') }}{% endif %}'">취소</button>
