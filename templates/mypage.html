@@ -62,22 +62,23 @@
         <div class="my-post-grid">
           {% for post in posts %}
             <article class="my-post-card">
-              <div class="my-post-card__body">
-                <div class="my-post-card__meta">
-                  <span>{{ post.created_at_text | default('작성일 미정') }}</span>
-                  <span>좋아요 {{ post.likes | default(0) }}</span>
-                </div>
-                <h3>{{ post.title }}</h3>
-                <p>{{ (post.summary or post.content or '') | truncate(110, true, '…') }}</p>
-                {% if post.tags %}
-                  <div class="tag-list" aria-label="게시글 태그">
-                    {% for tag in post.tags %}
-                      <span>#{{ tag }}</span>
-                    {% endfor %}
+              <a href= "{{ url_for('post.view_post', id = post._id )}}", style = "text-decoration: none; color: inherit;">
+                <div class="my-post-card__body">
+                  <div class="my-post-card__meta">
+                    <span>{{ post.created_at_text | default('작성일 미정') }}</span>
+                    <span>좋아요 {{ post.likes | default(0) }}</span>
                   </div>
-                {% endif %}
-              </div>
-
+                  <h3>{{ post.title }}</h3>
+                  <p>{{ (post.summary or post.content or '') | truncate(110, true, '…') }}</p>
+                  {% if post.tags %}
+                    <div class="tag-list" aria-label="게시글 태그">
+                      {% for tag in post.tags %}
+                        <span>#{{ tag }}</span>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                </div>
+              </a>
               <div class="my-post-card__actions">
                 <a href="{{ url_for('write.edit', id=post._id) }}">수정</a>
                 <form method="POST" action="{{ url_for('mypage.delete_post', post_id=post._id) }}">
