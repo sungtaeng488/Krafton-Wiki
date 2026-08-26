@@ -224,6 +224,12 @@ if (commentList) {
                 });
                 if (data) {
                     commentItem.querySelector(".comment-text").textContent = data.text;
+                    let timeElement = commentItem.querySelector("time");
+                    if (!timeElement) {
+                        timeElement = document.createElement("time");
+                        commentItem.querySelector("header").append(timeElement);
+                    }
+                    timeElement.textContent = data.updated_at_text;
                     closeEditMode(commentItem);
                 }
             } catch (error) {

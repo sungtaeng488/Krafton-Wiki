@@ -128,7 +128,8 @@ def view_post(id):
 
     for comment in post["comments"]:
         if isinstance(comment, dict):
-            comment["created_at_text"] = format_datetime(comment.get("created_at"))
+            displayed_at = comment.get("updated_at") or comment.get("created_at")
+            comment["displayed_at_text"] = format_datetime(displayed_at)
             comment["is_liked"] = bool(
                 g.user_id and g.user_id in comment.get("liked_users", [])
             )
@@ -337,6 +338,7 @@ def update_comment(id, comment_id):
     if len(text) > 1000:
         return jsonify(error="댓글은 최대 1,000자까지 작성할 수 있습니다."), 400
 
+    updated_at = datetime.now(timezone.utc)
     result = get_posts_collection().update_one(
         {
             "_id": object_id,
@@ -347,14 +349,18 @@ def update_comment(id, comment_id):
         {
             "$set": {
                 "comments.$.text": text,
-                "comments.$.updated_at": datetime.now(timezone.utc),
+                "comments.$.updated_at": updated_at,
             }
         },
     )
     if result.matched_count == 0:
         return jsonify(error="댓글 수정 권한이 없거나 댓글이 없습니다."), 403
 
-    return jsonify(ok=True, text=text)
+    return jsonify(
+        ok=True,
+        text=text,
+        updated_at_text=format_datetime(updated_at),
+    )
 
 
 @post_bp.route("/post/<id>/comments/<comment_id>", methods=["DELETE"])

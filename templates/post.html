@@ -130,8 +130,8 @@
                 <article class="comment-item" data-comment-id="{{ comment.id }}">
                     <header>
                         <strong>{{ comment.author | default('알 수 없음', true) }}</strong>
-                        {% if comment.created_at_text %}
-                        <time>{{ comment.created_at_text }}</time>
+                        {% if comment.displayed_at_text %}
+                        <time>{{ comment.displayed_at_text }}</time>
                         {% endif %}
                     </header>
                     <p class="comment-text">{{ comment.text | default('', true) }}</p>
