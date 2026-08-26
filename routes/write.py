@@ -116,9 +116,8 @@ def edit(id):
         )
 
         if not is_changed:
-            # 변경된 부분이 없으면 view_post로
-            view_url = url_for('post.view_post', id=id)
-            return f"<script>alert('변경된 내용이 없습니다.'); window.location.href='{view_url}';</script>"
+            flash('변경된 내용이 없습니다.')
+            return redirect(url_for('write.edit', id=id))
 
         current_version = ensure_initial_post_history(post, posts)
         new_version = current_version + 1
