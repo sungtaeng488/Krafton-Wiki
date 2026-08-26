@@ -197,3 +197,16 @@ if (commentList) {
         }
     });
 }
+
+const deletePostForm = document.querySelector(".delete-post-form");
+
+if (deletePostForm) {
+    deletePostForm.addEventListener("submit", (event) => {
+        const shouldDelete = window.confirm(
+            "이 글을 삭제할까요? 삭제한 글은 되돌릴 수 없습니다.",
+        );
+        if (!shouldDelete) {
+            event.preventDefault();
+        }
+    });
+}

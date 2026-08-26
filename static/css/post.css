@@ -127,6 +127,7 @@
 
 .like-button,
 .edit-link,
+.delete-post-button,
 .comment-form button {
     border: 0;
     border-radius: 6px;
@@ -158,6 +159,24 @@
 .edit-link:hover {
     background: #f1f3f5;
     color: #17191d;
+}
+
+.post-owner-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.delete-post-button {
+    padding: 11px 14px;
+    background: transparent;
+    color: #69717c;
+    font-size: 13px;
+}
+
+.delete-post-button:hover {
+    background: #fff1f1;
+    color: #c73b3b;
 }
 
 .comments-section {

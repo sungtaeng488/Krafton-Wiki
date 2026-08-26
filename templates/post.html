@@ -59,8 +59,13 @@
                 <form action="{{ url_for('post.like_post', id=post._id) }}" method="POST">
                     <button class="like-button" type="submit">♡ 좋아요 {{ post.likes | default(0) }}</button>
                 </form>
-                {% if load_user_id and load_user_id == post.user_id %}
-                <a class="edit-link" href="{{ url_for('write.edit', id=post._id) }}">글 수정</a>
+                {% if load_user_id and load_user_id == post.owner_id %}
+                <div class="post-owner-actions">
+                    <a class="edit-link" href="{{ url_for('write.edit', id=post._id) }}">수정</a>
+                    <form class="delete-post-form" action="{{ url_for('post.delete_post', id=post._id) }}" method="POST">
+                        <button class="delete-post-button" type="submit">삭제</button>
+                    </form>
+                </div>
                 {% endif %}
             </footer>
         </article>

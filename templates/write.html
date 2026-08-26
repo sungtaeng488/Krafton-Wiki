@@ -39,9 +39,9 @@
             <input type="text" id="summary" name="summary" style="width: 300px;" value="{{ post.summary if post else '' }}">
         </div>
         <br>
-        ##########임시로 작성자명 tester로 고정####################
-        <input type="hidden" name="author" value="tester">
-
         <button type="submit">{% if post %}수정 완료{% else %}DB에 저장하기{% endif %}</button>
-        <button type="button" onclick="location.href='/'">취소</button>
+        <button
+            type="button"
+            onclick="location.href='{% if post %}{{ url_for('post.view_post', id=post._id) }}{% else %}{{ url_for('main.index') }}{% endif %}'"
+        >취소</button>
     </form>

@@ -86,6 +86,7 @@ def view_post(id):
         abort(404)
 
     post["comments"], post["comment_count"] = normalize_comments(posts, post)
+    post["owner_id"] = post.get("user_id") or post.get("author")
     post["created_at_text"] = format_datetime(post.get("created_at"))
     post["updated_at_text"] = format_datetime(post.get("updated_at"))
 
@@ -213,3 +214,23 @@ def delete_comment(id, comment_id):
 
     post = posts.find_one({"_id": object_id}, {"comments": 1})
     return jsonify(ok=True, comment_count=len(post.get("comments", [])))
+
+
+@post_bp.route("/post/<id>/delete", methods=["POST"])
+@login_required
+def delete_post(id):
+    object_id = parse_post_id(id)
+    posts = get_posts_collection()
+    post = posts.find_one({"_id": object_id}, {"user_id": 1, "author": 1})
+    if not post:
+        abort(404)
+
+    owner_id = post.get("user_id") or post.get("author")
+    if owner_id != g.user_id:
+        abort(403)
+
+    result = posts.delete_one({"_id": object_id})
+    if result.deleted_count == 0:
+        abort(404)
+
+    return redirect(url_for("main.index"))
