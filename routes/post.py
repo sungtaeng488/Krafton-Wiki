@@ -36,28 +36,27 @@ def parse_post_id(post_id):
         abort(404)
 
 
-def as_seoul_datetime(value):
+def format_datetime(value):
     if not isinstance(value, datetime):
-        return None
+        return ""
 
     if value.tzinfo is None:
         value = value.replace(tzinfo=timezone.utc)
 
-    return value.astimezone(SEOUL_TIMEZONE)
-
-
-def format_datetime(value):
-    value = as_seoul_datetime(value)
-    return value.strftime("%Y년 %m월 %d일 %H:%M") if value else ""
+    return value.astimezone(SEOUL_TIMEZONE).strftime("%Y년 %m월 %d일 %H:%M")
 
 
 def format_date(value):
-    value = as_seoul_datetime(value)
-    return value.strftime("%Y년 %m월 %d일") if value else ""
+    if not isinstance(value, datetime):
+        return ""
+
+    if value.tzinfo is None:
+        value = value.replace(tzinfo=timezone.utc)
+
+    return value.astimezone(SEOUL_TIMEZONE).strftime("%Y년 %m월 %d일")
 
 
 def normalize_comments(posts, post):
-    """기존 댓글에 수정·삭제·좋아요 기능에 필요한 필드를 보완한다."""
     comments = post.get("comments", [])
     if not isinstance(comments, list):
         return [], comments or 0
@@ -130,7 +129,7 @@ def view_history(id, version=None):
     if not post:
         abort(404)
 
-    ensure_initial_post_history(post, posts)
+    current_version = ensure_initial_post_history(post, posts)
     histories = list_post_histories(object_id)
     for history in histories:
         history["created_at_text"] = format_datetime(history.get("created_at"))
@@ -152,6 +151,7 @@ def view_history(id, version=None):
         post=post,
         histories=histories,
         selected_history=selected_history,
+        current_version=current_version,
     )
 
 

@@ -18,14 +18,14 @@
                 <div class="post-title-row">
                     <h1>{{ post.title }}</h1>
                     <a class="history-link" href="{{ url_for('post.view_history', id=post._id) }}">
-                        <img
-                            class="history-icon"
-                            src="{{ url_for('static', filename='icons/book.svg') }}"
-                            alt=""
-                            aria-hidden="true"
-                        >
-                        <span>히스토리</span>
-                    </a>
+    <img
+        class="history-icon"
+        src="{{ url_for('static', filename='icons/book.svg') }}"
+        alt=""
+        aria-hidden="true"
+    >
+    <span>히스토리</span>
+</a>
                 </div>
 
                 <div class="post-byline">
@@ -73,11 +73,9 @@
                     data-post-like
                     data-like-url="{{ url_for('post.like_post', id=post._id) }}"
                 >
-                    <span
-                        class="like-heart{% if post.is_liked %} is-liked{% endif %}"
-                        data-post-like-heart
-                        aria-hidden="true"
-                    >{% if post.is_liked %}❤️{% else %}♡{% endif %}</span>
+                <span class="like-heart{% if post.is_liked %} is-liked{% endif %}" data-post-like-heart aria-hidden="true">
+                    {% if post.is_liked %}❤️{% else %}♡{% endif %}
+                </span>
                     <span>좋아요</span>
                     <span data-post-like-count>{{ post.likes | default(0) }}</span>
                 </button>
@@ -120,6 +118,8 @@
                 <a href="{{ url_for('auth.login', next=request.full_path) }}">로그인</a>해 주세요.
             </div>
             {% endif %}
+
+
             <div
                 class="comment-list"
                 data-post-id="{{ post._id }}"
@@ -141,10 +141,9 @@
                             type="button"
                             data-comment-action="like"
                         >
-                            <span
-                                class="comment-like-heart{% if comment.is_liked %} is-liked{% endif %}"
-                                aria-hidden="true"
-                            >{% if comment.is_liked %}❤️{% else %}♡{% endif %}</span>
+                           <span class="comment-like-heart{% if comment.is_liked %} is-liked{% endif %}" aria-hidden="true">
+                                {% if comment.is_liked %}❤️{% else %}♡{% endif %}
+                            </span>
                             <span>좋아요</span>
                             <span class="comment-like-count">{{ comment.likes | default(0) }}</span>
                         </button>
@@ -154,6 +153,7 @@
                         {% endif %}
                     </div>
                 </article>
+                {% else %}
                 {% endfor %}
             </div>
         </section>
