@@ -83,7 +83,11 @@
                         data-post-dislike
                         data-dislike-url="{{ url_for('post.dislike_post', id=post._id) }}"
                     >
-                        <span data-post-dislike-heart aria-hidden="true">{% if post.is_disliked %}👎{% else %}✖{% endif %}</span>
+                        <span
+                            data-post-dislike-heart
+                            data-default-icon="{{ url_for('static', filename='icons/thumbs-down-transparent.svg') }}"
+                            aria-hidden="true"
+                        >{% if post.is_disliked %}👎{% else %}<img class="dislike-icon" src="{{ url_for('static', filename='icons/thumbs-down-transparent.svg') }}" alt="">{% endif %}</span>
                         <span>싫어요</span>
                         <span data-post-dislike-count>{{ post.dislikes | default(0) }}</span>
                     </button>

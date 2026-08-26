@@ -366,7 +366,16 @@ if (postDislikeButton) {
             }
 
             const heart = postDislikeButton.querySelector("[data-post-dislike-heart]");
-            heart.textContent = data.is_disliked ? "👎" : "✖";
+            heart.replaceChildren();
+            if (data.is_disliked) {
+                heart.textContent = "👎";
+            } else {
+                const icon = document.createElement("img");
+                icon.className = "dislike-icon";
+                icon.src = heart.dataset.defaultIcon;
+                icon.alt = "";
+                heart.append(icon);
+            }
             document.querySelectorAll("[data-post-dislike-count]").forEach((element) => {
                 element.textContent = String(data.dislikes);
             });

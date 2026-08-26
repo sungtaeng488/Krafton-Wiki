@@ -210,6 +210,12 @@
     font-size: 13px;
 }
 
+.dislike-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+}
+
 .like-button.is-updating,
 .like-button:disabled,
 .dislike-button.is-updating,
