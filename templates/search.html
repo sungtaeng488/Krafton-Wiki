@@ -15,7 +15,6 @@
                 <span class="search-icon" aria-hidden="true"></span>
             </button>
         </form>
-        <small>쉼표(AND), |(OR), -(제외) 검색을 지원합니다.</small>
     </div>
 
     <!-- 검색을 했을 때만(search_tag가 있을 때만) 결과 영역을 보여줌 -->
@@ -55,15 +54,8 @@
                 <!-- 검색 결과가 없을 때의 안내 문구 -->
                 <p>조건에 맞는 검색 결과가 없습니다.</p>
             {% endif %}
-
-            <button style="margin-top: 20px;" onclick="location.href='/write'">새 글 쓰기</button>
         </div>
 
-    {% else %}
-        <!-- 아무 검색도 하지 않은 초기 화면일 때 '새 글 쓰기' 버튼도 중앙 아래쪽에 배치 -->
-        <div style="text-align: center; margin-top: -10vh;">
-            <button onclick="location.href='/write'">새 글 쓰기</button>
-        </div>
     {% endif %}
 </body>
 </html>

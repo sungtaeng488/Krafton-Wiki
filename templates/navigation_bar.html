@@ -24,9 +24,7 @@
                 {% endif %}
             {% endif %}
             {% if g.user_id %}
-                <form class="write-form" method="POST" action="{{ url_for('write.write') }}">
-                    <button class="write-button" type="submit">글 작성</button>
-                </form>
+                <a class="write-button" href="{{ url_for('write.write') }}">글 작성</a>
             {% endif %}
         </div>
     </div>
