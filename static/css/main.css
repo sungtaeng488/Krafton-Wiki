@@ -82,6 +82,35 @@ button {
     gap: 10px;
 }
 
+.write-button {
+    height: 40px;
+    border: 0;
+    cursor: pointer;
+    transition: background-color 160ms ease, transform 160ms ease;
+}
+
+.write-form {
+    margin: 0;
+}
+
+.write-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 19px;
+    border-radius: 999px;
+    background: var(--text);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 750;
+    text-decoration: none;
+}
+
+.write-button:hover {
+    background: #34383e;
+    transform: translateY(-1px);
+}
+
 .icon-button,
 .login-button,
 .logout-button {

@@ -7,7 +7,7 @@
 
 </head>
 <body>
-    <!-- 💡 핵심 포인트: search_tag(검색어)가 있으면 왼쪽 위 모드, 없으면 정중앙 모드 적용 -->
+    <!-- 검색 내용이 있을 시 검색창 왼쪽위로, 없으면 가운데 -->
     <div class="{% if search_tag %}top-left-mode{% else %}center-mode{% endif %}">
         <form class="search-form" action="/search" method="GET">
             <input type="text" name="tag" placeholder="검색어를 입력하세요" value="{{ search_tag or '' }}">
@@ -17,7 +17,6 @@
         </form>
     </div>
 
-    <!-- 검색을 했을 때만(search_tag가 있을 때만) 결과 영역을 보여줌 -->
     {% if search_tag %}
         <div class="results-area">
             {% if posts %}
@@ -36,26 +35,16 @@
                         
                         <small style="color: gray;">
                             ❤️: {{ post.likes | default(0) }} 
-                            | 
                             💬: {{ post.comments | length if post.comments else 0 }}
+                            작성자: {{ post.author }}
                         </small><br>
-                        
+                        {% if post.author == g.user_id %}
                         <button onclick="location.href='/edit/{{ post._id }}'">수정</button>
+                        {% endif %}
                     </li>
                 {% endfor %}
                 </ul>
-            {% else %}
-                <!-- 검색 결과가 없을 때의 안내 문구 -->
-                <p>조건에 맞는 검색 결과가 없습니다.</p>
             {% endif %}
-            
-            <button style="margin-top: 20px;" onclick="location.href='/write'">새 글 쓰기</button>
-        </div>
-
-    {% else %}
-        <!-- 아무 검색도 하지 않은 초기 화면일 때 '새 글 쓰기' 버튼도 중앙 아래쪽에 배치 -->
-        <div style="text-align: center; margin-top: -10vh;">
-            <button onclick="location.href='/write'">새 글 쓰기</button>
         </div>
     {% endif %}
 </body>

@@ -24,6 +24,11 @@
                 <a class="login-button" href="{{ url_for('auth.login') }}">로그인</a>
                 {% endif %}
             {% endif %}
+            {% if g.user_id %}
+                <form class="write-form" method="POST" action="{{ url_for('write.write') }}">
+                    <button class="write-button" type="submit">글 작성</button>
+                </form>
+            {% endif %}
         </div>
     </div>
 </header>
