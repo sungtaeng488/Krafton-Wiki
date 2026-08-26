@@ -8,9 +8,9 @@
 
         <div class="header-actions">
             {% if not hide_search %}
-            <button class="icon-button" type="button" aria-label="검색" onclick="location.href='search'">
+            <a class="icon-button" href="{{ url_for('search.search') }}" aria-label="검색">
                 <span class="search-icon" aria-hidden="true"></span>
-            </button>
+            </a>
             {% endif %}
 
             {% if load_user_id %}

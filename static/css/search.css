@@ -80,7 +80,7 @@ body {
     padding: 15px 25px; /* 👈 10px 0px 였던 것을 이렇게 넉넉하게 바꿔주세요! */
     cursor: pointer;
     font-size: 20px;
-    
+
     /* 👇 (추가 꿀팁) 돋보기가 버튼 한가운데 예쁘게 오게 정렬 */
     display: flex;
     align-items: center;
