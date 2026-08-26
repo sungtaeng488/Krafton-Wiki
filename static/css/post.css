@@ -164,15 +164,45 @@
 
 .like-button {
     min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
     padding: 0 17px;
     border: 1px solid #dce1e7;
     background: #ffffff;
     color: #343940;
+    text-decoration: none;
+    transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease;
 }
 
 .like-button:hover {
     border-color: #aeb5bf;
     background: #f8f9fa;
+}
+
+
+
+.like-heart,
+.comment-like-heart {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    font-size: 20px;
+    line-height: 1;
+    transition: transform 150ms ease;
+}
+.like-heart.is-liked,
+.comment-like-heart.is-liked {
+    font-size: 13px;
+}
+
+.like-button.is-updating,
+.like-button:disabled {
+    cursor: wait;
 }
 
 .history-link,
@@ -182,6 +212,7 @@
     font-size: 13px;
     text-decoration: none;
 }
+
 
 .post-title-row .history-link {
     flex: 0 0 auto;
@@ -384,8 +415,12 @@
 }
 
 .comment-like {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     margin-right: 4px;
 }
+
 
 .delete-comment:hover {
     border-color: #f0b8b8;
@@ -423,6 +458,7 @@
     line-height: 1.7;
     outline: none;
 }
+
 
 .comment-edit-textarea:focus {
     border-color: #69717c;

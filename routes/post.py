@@ -76,6 +76,9 @@ def normalize_comments(posts, post):
         if not isinstance(comment.get("likes"), int):
             comment["likes"] = 0
             changed = True
+        if not isinstance(comment.get("liked_users"), list):
+            comment["liked_users"] = []
+            changed = True
 
         normalized.append(comment)
 
@@ -102,12 +105,18 @@ def view_post(id):
 
     post["comments"], post["comment_count"] = normalize_comments(posts, post)
     post["owner_id"] = post.get("user_id") or post.get("author")
+    post["is_liked"] = bool(
+        g.user_id and g.user_id in post.get("liked_users", [])
+    )
     post["created_at_text"] = format_datetime(post.get("created_at"))
     post["updated_at_text"] = format_datetime(post.get("updated_at"))
 
     for comment in post["comments"]:
         if isinstance(comment, dict):
             comment["created_at_text"] = format_datetime(comment.get("created_at"))
+            comment["is_liked"] = bool(
+                g.user_id and g.user_id in comment.get("liked_users", [])
+            )
 
     return render_template("post.html", post=post)
 
@@ -161,16 +170,21 @@ def like_post(id):
     )
     if result.modified_count == 0:
         result = posts.update_one(
-            {"_id": object_id},
+            {"_id": object_id, "liked_users": {"$ne": g.user_id}},
             {
                 "$addToSet": {"liked_users": g.user_id},
                 "$inc": {"likes": 1},
             },
         )
-        if result.matched_count == 0:
-            abort(404)
+    post = posts.find_one({"_id": object_id}, {"likes": 1, "liked_users": 1})
+    if not post:
+        return jsonify(error="게시글을 찾을 수 없습니다."), 404
 
-    return redirect(url_for("post.view_post", id=id))
+    return jsonify(
+        ok=True,
+        likes=max(post.get("likes", 0), 0),
+        is_liked=g.user_id in post.get("liked_users", []),
+    )
 
 
 @post_bp.route("/comment/<id>", methods=["POST"])
@@ -178,31 +192,60 @@ def like_post(id):
 def add_comment(id):
     object_id = parse_post_id(id)
     text = request.form.get("text", "").strip()
+    wants_json = request.accept_mimetypes.best == "application/json"
     if not text:
+        if wants_json:
+            return jsonify(error="댓글 내용을 입력해주세요."), 400
         return redirect(url_for("post.view_post", id=id))
+    if len(text) > 1000:
+        if wants_json:
+            return jsonify(error="댓글은 최대 1,000자까지 작성할 수 있습니다."), 400
+        return "댓글은 최대 1,000자까지 작성할 수 있습니다.", 400
 
     posts = get_posts_collection()
     post = posts.find_one({"_id": object_id}, {"comments": 1})
     if not post:
+        if wants_json:
+            return jsonify(error="게시글을 찾을 수 없습니다."), 404
         abort(404)
 
     if not isinstance(post.get("comments", []), list):
         posts.update_one({"_id": object_id}, {"$set": {"comments": []}})
 
-    posts.update_one(
+    created_at = datetime.now(timezone.utc)
+    comment = {
+        "id": uuid4().hex,
+        "author": g.user_id,
+        "text": text,
+        "likes": 0,
+        "liked_users": [],
+        "created_at": created_at,
+    }
+    updated_post = posts.find_one_and_update(
         {"_id": object_id},
-        {
-            "$push": {
-                "comments": {
-                    "id": uuid4().hex,
-                    "author": g.user_id,
-                    "text": text,
-                    "likes": 0,
-                    "created_at": datetime.now(timezone.utc),
-                }
-            }
-        },
+        {"$push": {"comments": comment}},
+        projection={"comments": 1},
+        return_document=ReturnDocument.AFTER,
     )
+    if not updated_post:
+        if wants_json:
+            return jsonify(error="게시글을 찾을 수 없습니다."), 404
+        abort(404)
+
+    if wants_json:
+        return jsonify(
+            ok=True,
+            comment={
+                "id": comment["id"],
+                "author": comment["author"],
+                "text": comment["text"],
+                "likes": comment["likes"],
+                "is_liked": False,
+                "created_at_text": format_datetime(created_at),
+            },
+            comment_count=len(updated_post.get("comments", [])),
+        )
+
     return redirect(url_for("post.view_post", id=id))
 
 
@@ -212,20 +255,60 @@ def like_comment(id, comment_id):
     object_id = parse_post_id(id)
     posts = get_posts_collection()
     result = posts.update_one(
-        {"_id": object_id, "comments.id": comment_id},
-        {"$inc": {"comments.$.likes": 1}},
+        {
+            "_id": object_id,
+            "comments": {
+                "$elemMatch": {
+                    "id": comment_id,
+                    "liked_users": g.user_id,
+                }
+            },
+        },
+        {
+            "$pull": {"comments.$.liked_users": g.user_id},
+            "$inc": {"comments.$.likes": -1},
+        },
     )
-    if result.matched_count == 0:
-        return jsonify(error="댓글을 찾을 수 없습니다."), 404
+    if result.modified_count == 0:
+        result = posts.update_one(
+            {
+                "_id": object_id,
+                "comments": {
+                    "$elemMatch": {
+                        "id": comment_id,
+                        "liked_users": {"$ne": g.user_id},
+                    }
+                },
+            },
+            {
+                "$addToSet": {"comments.$.liked_users": g.user_id},
+                "$inc": {"comments.$.likes": 1},
+            },
+        )
 
     post = posts.find_one(
         {"_id": object_id, "comments.id": comment_id},
         {"comments": 1},
     )
+    if not post:
+        return jsonify(error="댓글을 찾을 수 없습니다."), 404
+
     comment = next(
-        item for item in post["comments"] if item.get("id") == comment_id
+        (
+            item
+            for item in post.get("comments", [])
+            if item.get("id") == comment_id
+        ),
+        None,
     )
-    return jsonify(ok=True, likes=comment.get("likes", 0))
+    if not comment:
+        return jsonify(error="댓글을 찾을 수 없습니다."), 404
+
+    return jsonify(
+        ok=True,
+        likes=max(comment.get("likes", 0), 0),
+        is_liked=g.user_id in comment.get("liked_users", []),
+    )
 
 
 @post_bp.route("/post/<id>/comments/<comment_id>", methods=["PATCH"])
