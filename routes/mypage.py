@@ -21,6 +21,12 @@ def mypage():
 
     # 유저가 작성한 포스트만 조회
     posts = list(get_posts_collection().find({"user_id": g.user_id}))
+    for post in posts:
+        created_at = post.get("created_at")
+        if isinstance(created_at, datetime):
+            if created_at.tzinfo is None:
+                created_at = created_at.replace(tzinfo=timezone.utc)
+            post["created_at_text"] = created_at.strftime("%Y.%m.%d")
 
     return render_template("mypage.html", user_id=g.user_id, posts=posts)
 
