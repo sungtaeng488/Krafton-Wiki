@@ -79,6 +79,11 @@ def filter_posts(posts, period):
     def created_date(post):
         return post["created_at"].date()
 
+    posts = [
+        post for post in posts
+        if not (post.get('dislikes', 0) >= 5 or post.get('dislikes', 0) > post.get('likes', 0))
+    ]
+
     if period == "today":
         return [post for post in posts if created_date(post) == today]
 

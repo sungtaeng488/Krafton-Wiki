@@ -100,7 +100,7 @@ def search():
             posts.sort(key=lambda post: post.get('created_at', ''), reverse=True)
 
         # 싫어요가 5개 이상인 글을 리스트 맨 아래로 밀어냄
-        posts.sort(key=lambda post: post.get('dislikes', 0) >= 5)
+        posts.sort(key=lambda post: post.get('dislikes', 0) >= 5 or post.get('dislikes', 0) > post.get('likes', 0))
 
     else:
         # 검색어 없으면 전체 글 로드
