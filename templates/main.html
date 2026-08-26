@@ -77,11 +77,13 @@
             aria-live="polite"
         >
             {% for post in posts %}
-            <div class="card">
+            <a
+                class="card"
+                href="{{ url_for('post.view_post', id=post.id) }}"
+                aria-label="{{ post.title }} 상세 보기"
+            >
                 <div class="card-body">
-                    <a class="card-title-link" href="{{ url_for('post.view_post', id=post.id) }}">
-                        <h2 class="card-title">{{ post.title }}</h2>
-                    </a>
+                    <h2 class="card-title">{{ post.title }}</h2>
                     <p class="card-summary">{{ post.summary }}</p>
                     <p class="card-content-preview">{{ post.content | trim }}</p>
                     <div class="card-tags" aria-label="게시글 태그">
@@ -110,7 +112,7 @@
                         <span>👁️ {{ post.views }}</span>
                     </div>
                 </div>
-            </div>
+            </a>
             {% else %}
             <div class="empty-state">
                 <strong>해당 기간에 작성된 글이 없습니다.</strong>

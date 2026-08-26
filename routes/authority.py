@@ -1,6 +1,7 @@
 # JWT
 from datetime import datetime, timedelta, timezone  # JWT의 발급시각, 만료시각
 from functools import wraps
+from urllib.parse import urlsplit
 
 import jwt  # PyJWT
 from flask import (
@@ -21,6 +22,18 @@ from db import ensure_database_indexes, get_users_collection
 
 # 인증 관련 라우트를 담는 Blueprint
 auth_bp = Blueprint("auth", __name__)
+
+
+def get_safe_next_url(value):
+    """외부 사이트가 아닌 현재 서비스 내부 경로만 로그인 후 이동에 사용."""
+    if not value:
+        return None
+
+    parsed = urlsplit(value)
+    if parsed.scheme or parsed.netloc or not parsed.path.startswith("/"):
+        return None
+
+    return parsed.path + (f"?{parsed.query}" if parsed.query else "")
 
 
 def load_user_id():
@@ -85,18 +98,31 @@ def login_required(view):
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "GET":
-        return render_template("login.html", registered=request.args.get("registered"))
+        return render_template(
+            "login.html",
+            registered=request.args.get("registered"),
+            next_url=get_safe_next_url(request.args.get("next")),
+        )
 
     # id 또는 비밀번호가 없는 경우
     user_id = request.form.get("id_give", "").strip()
     password = request.form.get("password_give", "")
+    next_url = get_safe_next_url(request.form.get("next"))
     if not user_id or not password:
-        return render_template("login.html", error="아이디와 비밀번호를 입력해주세요."), 400
+        return render_template(
+            "login.html",
+            error="아이디와 비밀번호를 입력해주세요.",
+            next_url=next_url,
+        ), 400
 
     # id가 없거나 비밀번호가 틀린경우
     user = get_users_collection().find_one({"user_id": user_id})
     if not user or not check_password_hash(user["password_hash"], password):
-        return render_template("login.html", error="아이디 또는 비밀번호가 올바르지 않습니다."), 401
+        return render_template(
+            "login.html",
+            error="아이디 또는 비밀번호가 올바르지 않습니다.",
+            next_url=next_url,
+        ), 401
 
     # jwt 생성
     now = datetime.now(timezone.utc)
@@ -111,7 +137,7 @@ def login():
     )
 
     # 로그인 성공 후 쿠키 발급
-    response = make_response(redirect(url_for("main.index")))
+    response = make_response(redirect(next_url or url_for("main.index")))
     response.set_cookie(
         "access_token",
         token,
@@ -137,7 +163,7 @@ def signup():
     # DB에 넣을 데이터
     user = {
         "user_id": user_id,
-        "password_hash": generate_password_hash(password),
+        "password_hash": generate_password_hash(password, method="pbkdf2:sha256"),
     }
 
     # 중복 검증

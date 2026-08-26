@@ -133,21 +133,21 @@ def get_sorted_posts(sort_type, period):
 
 def render_index(sort_type, period):
     sort_urls = {
-        name: (
-            url_for("main.sorted_index", sort_type=name)
-            if period == "week"
-            else url_for("main.filtered_index", sort_type=name, period=period)
-        )
-        for name in SORT_KEYS
-    }
+    name: url_for(
+        "main.filtered_index",
+        sort_type=name,
+        period=period
+    )
+    for name in SORT_KEYS
+}
     period_urls = {
-        name: (
-            url_for("main.sorted_index", sort_type=sort_type)
-            if name == "week"
-            else url_for("main.filtered_index", sort_type=sort_type, period=name)
-        )
-        for name in PERIOD_LABELS
-    }
+    name: url_for(
+        "main.filtered_index",
+        sort_type=sort_type,
+        period=name
+    )
+    for name in PERIOD_LABELS
+}
 
     return render_template(
         "main.html",
@@ -162,12 +162,12 @@ def render_index(sort_type, period):
 
 @main_bp.route("/")
 def index():
-    return render_index("trending", "week")
+    return render_index("trending", "year")
 
 
 @main_bp.route("/<any(trending,views,likes,latest):sort_type>")
 def sorted_index(sort_type):
-    return render_index(sort_type, "week")
+    return render_index(sort_type, "year")
 
 
 @main_bp.route(
