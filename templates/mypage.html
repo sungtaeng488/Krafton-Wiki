@@ -5,6 +5,8 @@
   <title>마이페이지</title>
 </head>
 <body>
+{% set hide_login = true %}
+{% include 'navigation_bar.html' %}
   <h1>마이페이지</h1>
 
   <p>{{ user_id }}님이 작성한 글</p>
