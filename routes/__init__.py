@@ -6,6 +6,7 @@ from .search import search_bp
 from .post import post_bp
 from .authority import auth_bp
 from .mypage import mypage_bp
+from .someonpage import someonepage_bp
 
 BLUEPRINTS = (
     auth_bp,
@@ -14,6 +15,7 @@ BLUEPRINTS = (
     search_bp,
     post_bp,
     mypage_bp,
+    someonepage_bp,
 )
 
 
