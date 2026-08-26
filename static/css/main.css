@@ -144,6 +144,7 @@ button {
     height: 17px;
     border: 2px solid currentColor;
     border-radius: 50%;
+    color: #333333
 }
 
 .search-icon::after {

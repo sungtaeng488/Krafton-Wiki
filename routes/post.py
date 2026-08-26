@@ -172,6 +172,31 @@ def like_post(id):
 
     return redirect(url_for("post.view_post", id=id))
 
+@post_bp.route('/dislike/<id>', methods=['POST'])          #싫어요
+@login_required
+def dislike_post(id):
+    object_id = parse_post_id(id)
+    posts = get_posts_collection()
+    result = posts.update_one(
+        {"_id": object_id, "disliked_users": g.user_id},
+        {
+            "$pull": {"disliked_users": g.user_id},
+            "$inc": {"dislikes": -1},
+        },
+    )
+    if result.modified_count == 0:
+        result = posts.update_one(
+            {"_id": object_id},
+            {
+                "$addToSet": {"disliked_users": g.user_id},
+                "$inc": {"dislikes": 1},
+            },
+        )
+        if result.matched_count == 0:
+            abort(404)
+        
+    return redirect(url_for("post.view_post", id=id))
+
 
 @post_bp.route("/comment/<id>", methods=["POST"])
 @login_required

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <title>{{ post.title }} · KRAFTON WIKI</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/post.css') }}">
 </head>
+
 <body>
     {% include 'navigation_bar.html' %}
 
@@ -18,14 +20,10 @@
                 <div class="post-title-row">
                     <h1>{{ post.title }}</h1>
                     <a class="history-link" href="{{ url_for('post.view_history', id=post._id) }}">
-    <img
-        class="history-icon"
-        src="{{ url_for('static', filename='icons/book.svg') }}"
-        alt=""
-        aria-hidden="true"
-    >
-    <span>히스토리</span>
-</a>
+                        <img class="history-icon" src="{{ url_for('static', filename='icons/book.svg') }}" alt=""
+                            aria-hidden="true">
+                        <span>히스토리</span>
+                    </a>
                 </div>
 
                 <div class="post-byline">
@@ -50,6 +48,7 @@
                 <div class="post-stats" aria-label="게시글 통계">
                     <span>조회수 <strong>{{ post.views | default(0) }}</strong></span>
                     <span>좋아요 <strong>{{ post.likes | default(0) }}</strong></span>
+                    <span>싫어요 <strong>{{ post.dislikes | default(0) }}</strong></span>
                     <span>댓글 <strong data-comment-count>{{ post.comment_count }}</strong></span>
                 </div>
             </header>
@@ -67,16 +66,22 @@
 
             <footer class="post-actions">
                 {% if load_user_id %}
-                <form action="{{ url_for('post.like_post', id=post._id) }}" method="POST">
-                    <button class="like-button" type="submit">♡ 좋아요 {{ post.likes | default(0) }}</button>
-                </form>
+                <div class="button-container">
+                    <form action="{{ url_for('post.like_post', id=post._id) }}" method="POST">
+                        <button class="like-button" type="submit">♡ 좋아요 {{ post.likes | default(0) }}</button>
+                    </form>
+                    <form action="{{ url_for('post.dislike_post', id=post._id) }}" method="POST">
+                        <button class="dislike-button" type="submit"> 싫어요 {{ post.dislikes | default(0) }}</button>
+                    </form>
+                </div>
                 {% else %}
-                <a class="like-button" href="{{ url_for('auth.login', next=request.full_path) }}">로그인 후 좋아요</a>
+                <a class="like-button" href="{{ url_for('auth.login', next=request.full_path) }}">로그인 필요</a>
                 {% endif %}
                 {% if load_user_id and load_user_id == post.owner_id %}
                 <div class="post-owner-actions">
                     <a class="edit-link" href="{{ url_for('write.edit', id=post._id) }}">수정</a>
-                    <form class="delete-post-form" action="{{ url_for('post.delete_post', id=post._id) }}" method="POST">
+                    <form class="delete-post-form" action="{{ url_for('post.delete_post', id=post._id) }}"
+                        method="POST">
                         <button class="delete-post-button" type="submit">삭제</button>
                     </form>
                 </div>
@@ -90,14 +95,8 @@
             {% if load_user_id %}
             <form class="comment-form" action="{{ url_for('post.add_comment', id=post._id) }}" method="POST">
                 <label for="comment-text"><strong>{{ load_user_id }}</strong> 님으로 댓글 작성</label>
-                <textarea
-                    id="comment-text"
-                    name="text"
-                    rows="4"
-                    maxlength="1000"
-                    placeholder="내용에 대한 의견이나 질문을 남겨보세요."
-                    required
-                ></textarea>
+                <textarea id="comment-text" name="text" rows="4" maxlength="1000" placeholder="내용에 대한 의견이나 질문을 남겨보세요."
+                    required></textarea>
                 <div class="comment-form-actions">
                     <span>최대 1,000자</span>
                     <button type="submit">댓글 등록</button>
@@ -111,12 +110,9 @@
             {% endif %}
 
 
-            <div
-                class="comment-list"
-                data-post-id="{{ post._id }}"
+            <div class="comment-list" data-post-id="{{ post._id }}"
                 data-is-logged-in="{{ 'true' if load_user_id else 'false' }}"
-                data-login-url="{{ url_for('auth.login', next=request.full_path) }}"
-            >
+                data-login-url="{{ url_for('auth.login', next=request.full_path) }}">
                 {% for comment in post.comments | reverse %}
                 <article class="comment-item" data-comment-id="{{ comment.id }}">
                     <header>
@@ -131,8 +127,10 @@
                             ♡ 좋아요 {{ comment.likes | default(0) }}
                         </button>
                         {% if load_user_id and load_user_id == comment.author %}
-                        <button class="comment-action replace-comment" type="button" data-comment-action="edit">수정</button>
-                        <button class="comment-action delete-comment" type="button" data-comment-action="delete">삭제</button>
+                        <button class="comment-action replace-comment" type="button"
+                            data-comment-action="edit">수정</button>
+                        <button class="comment-action delete-comment" type="button"
+                            data-comment-action="delete">삭제</button>
                         {% endif %}
                     </div>
                 </article>
@@ -143,4 +141,5 @@
     </main>
     <script src="{{ url_for('static', filename='js/post.js') }}"></script>
 </body>
+
 </html>

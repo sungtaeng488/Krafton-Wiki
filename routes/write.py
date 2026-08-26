@@ -55,6 +55,8 @@ def write():
                 'status': 'published',
                 'likes': 0,
                 'liked_users': [],
+                'dislikes': 0,
+                'disliked_users': [],
                 'comments': [],
                 'views': 0,
                 'views_24h': 0,
@@ -105,6 +107,18 @@ def edit(id):
             post.update(form_data)
             post['tags_str'] = '#' + ' #'.join(form_data['tags'])
             return render_template('write.html', post=post)
+
+        is_changed = (
+            post.get('title') != form_data['title'] or
+            post.get('content') != form_data['content'] or
+            post.get('summary') != form_data['summary'] or
+            post.get('tags') != form_data['tags']
+        )
+
+        if not is_changed:
+            # 변경된 부분이 없으면 view_post로
+            view_url = url_for('post.view_post', id=id)
+            return f"<script>alert('변경된 내용이 없습니다.'); window.location.href='{view_url}';</script>"
 
         current_version = ensure_initial_post_history(post, posts)
         new_version = current_version + 1

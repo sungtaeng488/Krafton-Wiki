@@ -4,11 +4,6 @@ body {
     padding: 0;
 }
 
-/* =========================================
-           1. 컨테이너 상태별 위치 설정
-        ========================================= */
-/* 검색 전: 화면 정중앙 (가로, 세로 모두) */
-
 .center-mode {
     display: flex;
     justify-content: center;
@@ -16,7 +11,6 @@ body {
     align-items: center;
     /* 세로 중앙 */
     height: 80vh;
-    /* 화면 전체 높이의 80% 차지 (세로 중앙을 위해 필수!) */
 }
 
 /* 검색 후: 왼쪽 위로 이동 */
@@ -30,9 +24,6 @@ body {
     /* 왼쪽 여백 */
 }
 
-/* =========================================
-           2. 검색창 고정 디자인 (가운데든 왼쪽이든 크기 유지)
-        ========================================= */
 .search-form {
     display: flex;
     align-items: center;
@@ -77,11 +68,10 @@ body {
 .search-form button {
     background-color: transparent;
     border: none;
-    padding: 15px 25px; /* 👈 10px 0px 였던 것을 이렇게 넉넉하게 바꿔주세요! */
+    padding: 15px 25px;
     cursor: pointer;
     font-size: 20px;
 
-    /* 👇 (추가 꿀팁) 돋보기가 버튼 한가운데 예쁘게 오게 정렬 */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -90,10 +80,7 @@ body {
     background-color: #f1f1f1;
 }
 
-/* =========================================
-           3. 검색 결과 목록 & 버튼 위치 맞춤
-        ========================================= */
+
 .results-area {
     padding-left: 30px;
-    /* 검색창이 왼쪽 위로 갔을 때 줄을 맞추기 위한 여백 */
 }

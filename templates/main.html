@@ -79,7 +79,7 @@
             {% for post in posts %}
             <a
                 class="card"
-                href="{{ url_for('post.view_post', id=post.id) }}"
+                href="{{ url_for('post.view_post', id=post._id) }}"
                 aria-label="{{ post.title }} 상세 보기"
             >
                 <div class="card-body">
