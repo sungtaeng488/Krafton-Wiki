@@ -16,9 +16,10 @@
             </button>
         </form>
     </div>
-
+    <!-- tag를 검색했을 때 -->
     {% if search_tag %}
         <div class="results-area">
+            <!-- 해당하는 글이 있으면 출력 -->
             {% if posts %}
                 <ul>
                 {% for post in posts %}
@@ -38,8 +39,14 @@
                             💬: {{ post.comments | length if post.comments else 0 }}
                             작성자: {{ post.author }}
                         </small><br>
+                        <!--  -->
                         {% if post.author == g.user_id %}
                         <button onclick="location.href='/edit/{{ post._id }}'">수정</button>
+                        
+                        <form action="{{ url_for('write.delete', id=post._id) }}" method="POST" onsubmit="return confirm('정말 이 글을 삭제하시겠습니까?');">
+                            <input type="hidden" name="search_tag" value="{{ search_tag }}">
+                            <button type="submit">삭제하기</button>
+                        </form>
                         {% endif %}
                     </li>
                 {% endfor %}

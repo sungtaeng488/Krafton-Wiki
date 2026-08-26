@@ -25,8 +25,9 @@ def get_post_form_data():
         'tags': tags_list,
         'summary': request.form.get('summary'),
         'author': g.user_id,
-        'current_time': datetime.now().strftime('%Y-%m-%d %H:%M'),
+        'created_at': datetime.now().strftime('%Y-%m-%d %H:%M'),
         'likes': 0,         # 기본값 추가
+        'liked_users': [],
         'dislikes': 0,      
         'comments': [],
         'views':0,
@@ -80,3 +81,18 @@ def edit(id):
             }}
 )
         return redirect(url_for('search.search'))
+
+@write_bp.route('/delete/<id>', methods=['POST'])           # 글 삭제
+@login_required
+def delete(id):
+    # 삭제하려는 글을 DB에서 찾기
+    post = db.posts.find_one({'_id': ObjectId(id)})
+    
+    # 글이 존재하고, 현재 로그인한 사용자(g.user_id)가 글의 작성자와 일치하는지 확인
+    if post and post.get('author') == g.user_id:
+        db.posts.delete_one({'_id': ObjectId(id)})
+        flash('글이 성공적으로 삭제되었습니다.')
+    else:
+        flash('삭제 권한이 없거나 존재하지 않는 글입니다.')
+
+    return redirect(url_for('search.search', tag=request.form.get('search_tag')))

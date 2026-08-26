@@ -14,16 +14,16 @@
     <h1>글 작성</h1>
     
     <!-- post 데이터가 있으면 /edit/아이디 로 전송, 없으면 /write 로 전송 -->
-    <form action="{% if post %}/edit/{{ post._id }}{% else %}/write{% endif %}" method="POST">
+    <form action="{% if post._id %}/edit/{{ post._id }}{% else %}/write{% endif %}" method="POST">
         <div>
             <label for="title">제목:</label><br>
-            <input type="text" id="title" name="title" value="{{ post.title if post else '' }}" required>
+            <input type="text" id="title" name="title" value="{{ post.title if post and post.title else '' }}" required>
         </div>
         <br>
         
         <div>
             <label for="content">내용:</label><br>
-            <textarea id="content" name="content" rows="8" cols="50" required>{{ post.content if post else '' }}</textarea>
+            <textarea id="content" name="content" rows="8" cols="50" required>{{ post.content if post and post.content else '' }}</textarea>
         </div>
         <br>
         
@@ -46,12 +46,12 @@
         <br>
         
         <div>
-            <label for="review">한줄평:</label><br>
-            <input type="text" id="review" name="review" style="width: 300px;" value="{{ post.review if post else '' }}">
+            <label for="summary">한줄평:</label><br>
+            <input type="text" id="summary" name="summary" style="width: 300px;" value="{{ post.summary if post and post.summary else '' }}">
         </div>
         <br>
         
-        <button type="submit">{% if post %}수정 완료{% else %}DB에 저장하기{% endif %}</button>
+        <button type="submit">{% if post._id %}수정 완료{% else %}DB에 저장하기{% endif %}</button>
         <button type="button" onclick="location.href='/'">취소</button>
     </form>
 

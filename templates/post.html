@@ -1,20 +1,25 @@
 <!DOCTYPE html>
 <html lang="ko">
-{% set hide_login = true %}
-{% include 'navigation_bar.html' %}
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    {% include 'navigation_bar.html' %}
     <!--글 상세 내용 -->
     <h1>{{ post.title }}</h1>
     <p><small>
-        태그: 
-        {% for tag in post.tags %}
+            태그:
+            {% for tag in post.tags %}
             <a href="/?tag={{ tag }}">#{{ tag }}</a>
-        {% endfor %}
-        | 키워드: {{ post.keywords }}
-    </small></p>
+            {% endfor %}
+            | 키워드: {{ post.keywords }}
+        </small></p>
     <hr>
-    
+
     <div style="min-height: 150px; white-space: pre-wrap;">{{ post.content }}</div>
-    
+
     <hr>
     <p><strong>한줄요약:</strong> {{ post.summary }}</p>
 
@@ -23,26 +28,64 @@
         <button type="submit">❤️ 좋아요 ({{ post.likes | default(0) }})</button>
     </form>
 
-    <!--댓글 목록 -->
-    <h3>댓글 목록 ({{ post.comments | length if post.comments else 0 }})</h3>
     <ul>
-        {% if post.comments %}
-            {% for comment in post.comments %}
-                <li><strong>{{ comment.author }}</strong>: {{ comment.text }}</li>
-            {% endfor %}
+        {% for comment in post.comments %}
+        <li style="margin-bottom: 15px;">
+            <strong>{{ comment.author }}</strong> : {{ comment.text }}
+
+            <!-- 본인 댓글에만 수정/삭제 표시 -->
+            {% if g.user_id == comment.author %}
+            <div style="display: inline-block; margin-left: 10px;">
+                <!-- 삭제 -->
+                <form action="{{ url_for('post.delete_comment', post_id=post._id, comment_id=comment.comment_id) }}"
+                    method="POST" style="display: inline;" onsubmit="return confirm('댓글을 삭제하시겠습니까?');">
+                    <button type="submit" style="color: red; cursor: pointer;">삭제</button>
+                </form>
+
+                <!--  수정 -->
+                <button type="button" onclick="toggleEdit('{{ comment.comment_id }}')"
+                    style="cursor: pointer;">수정</button>
+            </div>
+
+            <!-- 수정 폼 -->
+            <form id="edit-form-{{ comment.comment_id }}"
+                action="{{ url_for('post.edit_comment', post_id=post._id, comment_id=comment.comment_id) }}"
+                method="POST" style="display: none; margin-top: 5px;">
+                <input type="text" name="text" value="{{ comment.text }}" required style="width: 250px;">
+                <button type="submit">저장</button>
+                <button type="button" onclick="toggleEdit('{{ comment.comment_id }}')">취소</button>
+            </form>
+            {% endif %}
+        </li>
         {% else %}
-            <li>아직 댓글이 없습니다. 첫 댓글을 남겨보세요!</li>
-        {% endif %}
+        <p>아직 댓글이 없습니다.</p>
+        {% endfor %}
     </ul>
 
-    <!--댓글 작성 form -->
-    <form action="/comment/{{ post._id }}" method="POST">
-        <input type="text" name="author" placeholder="작성자" style="width: 100px;">
+    <!-- 댓글 작성 form -->
+    <form action="/comment/{{ post._id }}" method="POST" style="margin-top: 20px;">
         <input type="text" name="text" placeholder="댓글 내용을 입력하세요" style="width: 300px;" required>
         <button type="submit">댓글 쓰기</button>
     </form>
-    
+
+    <!-- 수정 폼 열고 닫는 자바스크립트 -->
+    <script>
+        function toggleEdit(commentId) {
+            const editForm = document.getElementById('edit-form-' + commentId);
+            if (editForm.style.display === 'none') {
+                editForm.style.display = 'block';
+            } else {
+                editForm.style.display = 'none';
+            }
+        }
+    </script>
+
     <br><br>
-    <!-- 수정 및 목록으로 돌아가기 버튼 -->
+    <!-- 수정 및 목록으로 돌아가기 -->
+     {% if post.author == g.user_id %}
     <button onclick="location.href='/edit/{{ post._id }}'">글 수정하기</button>
+    {% endif %}
     <button onclick="location.href='/'">목록으로</button>
+</body>
+
+</html>
