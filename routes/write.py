@@ -6,6 +6,7 @@ from bson.objectid import ObjectId
 from flask import Blueprint, abort, flash, g, redirect, render_template, request, url_for
 
 from db import get_posts_collection
+from db.post_history import ensure_initial_post_history, save_post_history
 from routes.authority import login_required
 
 write_bp = Blueprint("write", __name__)
@@ -56,9 +57,17 @@ def write():
                 'comments': [],
                 'views': 0,
                 'views_24h': 0,
+                'version': 1,
             }
         )
-        get_posts_collection().insert_one(form_data)
+        result = get_posts_collection().insert_one(form_data)
+        save_post_history(
+            result.inserted_id,
+            1,
+            form_data,
+            g.user_id,
+            form_data['created_at'],
+        )
         return redirect(url_for('main.index'))
 
     return render_template('write.html')
@@ -96,9 +105,12 @@ def edit(id):
             post['tags_str'] = '#' + ' #'.join(form_data['tags'])
             return render_template('write.html', post=post)
 
+        current_version = ensure_initial_post_history(post, posts)
+        new_version = current_version + 1
         result = posts.update_one(
             {
                 '_id': object_id,
+                'version': current_version,
                 '$or': [
                     {'user_id': g.user_id},
                     {'user_id': {'$exists': False}, 'author': g.user_id},
@@ -110,9 +122,18 @@ def edit(id):
                 'tags': form_data['tags'],
                 'summary': form_data['summary'],
                 'updated_at': form_data['updated_at'],
+                'version': new_version,
             }}
         )
         if result.matched_count == 0:
-            abort(403)
+            abort(409)
+
+        save_post_history(
+            object_id,
+            new_version,
+            {**post, **form_data},
+            g.user_id,
+            form_data['updated_at'],
+        )
 
         return redirect(url_for('post.view_post', id=id))

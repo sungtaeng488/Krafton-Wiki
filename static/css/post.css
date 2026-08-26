@@ -30,6 +30,31 @@
     letter-spacing: -0.055em;
     overflow-wrap: anywhere;
 }
+.history-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    color: #5f6670;
+    text-decoration: none;
+}
+
+.history-icon {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+}
+
+.post-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.post-title-row h1 {
+    min-width: 0;
+}
 
 .post-byline,
 .post-stats {
@@ -126,6 +151,7 @@
 }
 
 .like-button,
+.history-link,
 .edit-link,
 .delete-post-button,
 .comment-form button {
@@ -149,6 +175,7 @@
     background: #f8f9fa;
 }
 
+.history-link,
 .edit-link {
     padding: 11px 14px;
     color: #69717c;
@@ -156,6 +183,15 @@
     text-decoration: none;
 }
 
+.post-title-row .history-link {
+    flex: 0 0 auto;
+    padding: 10px 14px;
+    border: 1px solid #dce1e7;
+    background: #ffffff;
+    white-space: nowrap;
+}
+
+.history-link:hover,
 .edit-link:hover {
     background: #f1f3f5;
     color: #17191d;
@@ -424,6 +460,12 @@
 
     .post-header h1 {
         font-size: 36px;
+    }
+
+    .post-title-row {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 16px;
     }
 
     .post-summary,

@@ -16,7 +16,12 @@ from flask import (
 )
 from pymongo import ReturnDocument
 
-from db import get_posts_collection
+from db import get_post_histories_collection, get_posts_collection
+from db.post_history import (
+    ensure_initial_post_history,
+    get_post_history,
+    list_post_histories,
+)
 from routes.authority import login_required
 
 
@@ -39,6 +44,16 @@ def format_datetime(value):
         value = value.replace(tzinfo=timezone.utc)
 
     return value.astimezone(SEOUL_TIMEZONE).strftime("%Y년 %m월 %d일 %H:%M")
+
+
+def format_date(value):
+    if not isinstance(value, datetime):
+        return ""
+
+    if value.tzinfo is None:
+        value = value.replace(tzinfo=timezone.utc)
+
+    return value.astimezone(SEOUL_TIMEZONE).strftime("%Y년 %m월 %d일")
 
 
 def normalize_comments(posts, post):
@@ -95,6 +110,41 @@ def view_post(id):
             comment["created_at_text"] = format_datetime(comment.get("created_at"))
 
     return render_template("post.html", post=post)
+
+
+@post_bp.route("/post/<id>/history")
+@post_bp.route("/post/<id>/history/<int:version>")
+def view_history(id, version=None):
+    object_id = parse_post_id(id)
+    posts = get_posts_collection()
+    post = posts.find_one({"_id": object_id})
+    if not post:
+        abort(404)
+
+    current_version = ensure_initial_post_history(post, posts)
+    histories = list_post_histories(object_id)
+    for history in histories:
+        history["created_at_text"] = format_datetime(history.get("created_at"))
+
+    selected_history = None
+    if version is not None:
+        selected_history = get_post_history(object_id, version)
+        if not selected_history:
+            abort(404)
+        selected_history["created_at_text"] = format_datetime(
+            selected_history.get("created_at")
+        )
+        selected_history["created_date_text"] = format_date(
+            selected_history.get("created_at")
+        )
+
+    return render_template(
+        "post_history.html",
+        post=post,
+        histories=histories,
+        selected_history=selected_history,
+        current_version=current_version,
+    )
 
 
 @post_bp.route("/like/<id>", methods=["POST"])
@@ -232,5 +282,7 @@ def delete_post(id):
     result = posts.delete_one({"_id": object_id})
     if result.deleted_count == 0:
         abort(404)
+
+    get_post_histories_collection().delete_many({"post_id": object_id})
 
     return redirect(url_for("main.index"))

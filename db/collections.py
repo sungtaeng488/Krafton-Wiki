@@ -9,6 +9,10 @@ def get_users_collection():
     return get_database()["users"]
 
 
+def get_post_histories_collection():
+    return get_database()["post_histories"]
+
+
 def ensure_database_indexes():
     get_users_collection().create_index(
         "user_id",

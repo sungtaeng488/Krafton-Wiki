@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>문서 히스토리 · {{ post.title }} · KRAFTON WIKI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/history.css') }}">
+</head>
+<body>
+    {% include 'navigation_bar.html' %}
+
+    <main class="history-page">
+        <header class="history-header">
+            <a class="history-back-link" href="{{ url_for('post.view_post', id=post._id) }}">← 현재 문서로</a>
+            <p>문서 히스토리</p>
+            <h1>{{ post.title }}</h1>
+        </header>
+
+        <div class="history-layout">
+            <aside class="history-panel" aria-labelledby="history-list-title">
+                <div class="history-panel-heading">
+                    <h2 id="history-list-title">수정 기록</h2>
+                    <span>{{ histories | length }}개 기록</span>
+                </div>
+
+                <nav class="history-list" aria-label="문서 수정 기록 목록">
+                    {% for history in histories %}
+                    <a
+                        class="history-item{% if selected_history and selected_history.version == history.version %} is-active{% endif %}"
+                        href="{{ url_for('post.view_history', id=post._id, version=history.version) }}"
+                        {% if selected_history and selected_history.version == history.version %}aria-current="page"{% endif %}
+                    >
+                        <div class="history-item-top">
+                            <time>{{ history.created_at_text }}</time>
+                        </div>
+                        <span>
+                            {{ history.edited_by }}
+                            {% if history.version == 1 %}· 최초 작성{% else %}· 내용 수정{% endif %}
+                        </span>
+                    </a>
+                    {% else %}
+                    <p class="history-empty">저장된 히스토리가 없습니다.</p>
+                    {% endfor %}
+                </nav>
+            </aside>
+
+            <section class="history-preview" aria-live="polite">
+                {% if selected_history %}
+                <div class="version-notice">
+                    <div>
+                        <strong>{{ selected_history.created_date_text }} 버전을 보고 있습니다</strong>
+                        <span>
+                            {{ selected_history.edited_by }}
+                            {% if selected_history.version == 1 %}· 최초 작성{% else %}· 내용 수정{% endif %}
+                        </span>
+                    </div>
+                    <a href="{{ url_for('post.view_post', id=post._id) }}">현재 버전으로 돌아가기</a>
+                </div>
+
+                <article class="history-document">
+                    <header>
+                        <span>{{ selected_history.created_at_text }}의 문서</span>
+                        <h2>{{ selected_history.title }}</h2>
+                        {% if selected_history.tags %}
+                        <div class="history-tags">
+                            {% for tag in selected_history.tags %}
+                            <span>#{{ tag }}</span>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </header>
+
+                    {% if selected_history.summary %}
+                    <aside class="history-summary">
+                        <strong>요약</strong>
+                        <p>{{ selected_history.summary }}</p>
+                    </aside>
+                    {% endif %}
+
+                    <div class="history-content">{{ selected_history.content }}</div>
+                </article>
+                {% else %}
+                <div class="history-placeholder">
+                    <strong>확인할 수정 기록을 선택해주세요.</strong>
+                    <p>왼쪽 수정 기록을 누르면 그 시점의 제목, 요약, 본문과 태그를 확인할 수 있습니다.</p>
+                </div>
+                {% endif %}
+            </section>
+        </div>
+    </main>
+</body>
+</html>
