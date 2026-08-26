@@ -15,7 +15,7 @@ def view_post(id):
 def like_post(id):
     #likes++ 후 #view post로
     db.posts.update_one({'_id': ObjectId(id)}, {'$inc': {'likes': 1}})
-    return redirect(url_for('view_post', id=id))
+    return redirect(url_for('post.view_post', id=id))
 
 @post_bp.route('/comment/<id>', methods=['POST'])       #댓글
 def add_comment(id):
@@ -28,4 +28,4 @@ def add_comment(id):
             {'_id': ObjectId(id)},
             {'$push': {'comments': {'author': author, 'text': text}}}
         )
-    return redirect(url_for('view_post', id=id))
+    return redirect(url_for('post.view_post', id=id))
