@@ -11,7 +11,10 @@
 
     <main class="history-page">
         <header class="history-header">
-            <a class="history-back-link" href="{{ url_for('post.view_post', id=post._id) }}">← 현재 문서로</a>
+            <a
+                class="history-back-link"
+                href="{{ url_for('post.view_post', id=post._id) }}"
+            >← 현재 문서로</a>
             <p>문서 히스토리</p>
             <h1>{{ post.title }}</h1>
         </header>
@@ -25,10 +28,11 @@
 
                 <nav class="history-list" aria-label="문서 수정 기록 목록">
                     {% for history in histories %}
+                    {% set is_selected = selected_history and selected_history.version == history.version %}
                     <a
-                        class="history-item{% if selected_history and selected_history.version == history.version %} is-active{% endif %}"
+                        class="history-item{% if is_selected %} is-active{% endif %}"
                         href="{{ url_for('post.view_history', id=post._id, version=history.version) }}"
-                        {% if selected_history and selected_history.version == history.version %}aria-current="page"{% endif %}
+                        {% if is_selected %}aria-current="page"{% endif %}
                     >
                         <div class="history-item-top">
                             <time>{{ history.created_at_text }}</time>

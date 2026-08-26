@@ -116,13 +116,10 @@ body {
 }
 
 .history-item > span {
-    color: var(--history-muted);
-    font-size: 12px;
-}
-
-.history-item > span {
     display: block;
     margin-top: 7px;
+    color: var(--history-muted);
+    font-size: 12px;
 }
 
 .history-preview {
@@ -265,5 +262,4 @@ body {
         width: min(100% - 32px, 1180px);
         padding-top: 30px;
     }
-
 }

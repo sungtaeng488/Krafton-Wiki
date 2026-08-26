@@ -30,6 +30,7 @@
     letter-spacing: -0.055em;
     overflow-wrap: anywhere;
 }
+
 .history-link {
     display: inline-flex;
     align-items: center;
@@ -181,8 +182,6 @@
     background: #f8f9fa;
 }
 
-
-
 .like-heart,
 .comment-like-heart {
     display: inline-flex;
@@ -195,6 +194,7 @@
     line-height: 1;
     transition: transform 150ms ease;
 }
+
 .like-heart.is-liked,
 .comment-like-heart.is-liked {
     font-size: 13px;
@@ -212,7 +212,6 @@
     font-size: 13px;
     text-decoration: none;
 }
-
 
 .post-title-row .history-link {
     flex: 0 0 auto;
@@ -421,7 +420,6 @@
     margin-right: 4px;
 }
 
-
 .delete-comment:hover {
     border-color: #f0b8b8;
     background: #fff5f5;
@@ -458,7 +456,6 @@
     line-height: 1.7;
     outline: none;
 }
-
 
 .comment-edit-textarea:focus {
     border-color: #69717c;

@@ -133,21 +133,21 @@ def get_sorted_posts(sort_type, period):
 
 def render_index(sort_type, period):
     sort_urls = {
-    name: url_for(
-        "main.filtered_index",
-        sort_type=name,
-        period=period
-    )
-    for name in SORT_KEYS
-}
+        name: url_for(
+            "main.filtered_index",
+            sort_type=name,
+            period=period,
+        )
+        for name in SORT_KEYS
+    }
     period_urls = {
-    name: url_for(
-        "main.filtered_index",
-        sort_type=sort_type,
-        period=name
-    )
-    for name in PERIOD_LABELS
-}
+        name: url_for(
+            "main.filtered_index",
+            sort_type=sort_type,
+            period=name,
+        )
+        for name in PERIOD_LABELS
+    }
 
     return render_template(
         "main.html",

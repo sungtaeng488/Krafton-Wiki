@@ -1,5 +1,6 @@
 const commentList = document.querySelector(".comment-list");
 const commentForm = document.querySelector(".comment-form");
+const parseJson = (response) => response.json().catch(() => ({}));
 
 if (commentList) {
     const postId = commentList.dataset.postId;
@@ -17,7 +18,7 @@ if (commentList) {
             return null;
         }
 
-        const data = await response.json().catch(() => ({}));
+        const data = await parseJson(response);
         if (!response.ok) {
             throw new Error(data.error || "요청을 처리하지 못했습니다.");
         }
@@ -95,7 +96,7 @@ if (commentList) {
             try {
                 const response = await fetch(commentForm.action, {
                     method: "POST",
-                    headers: {"Accept": "application/json"},
+                    headers: { "Accept": "application/json" },
                     body: new FormData(commentForm),
                 });
 
@@ -104,7 +105,7 @@ if (commentList) {
                     return;
                 }
 
-                const data = await response.json().catch(() => ({}));
+                const data = await parseJson(response);
                 if (!response.ok) {
                     throw new Error(data.error || "댓글을 등록하지 못했습니다.");
                 }
@@ -218,7 +219,7 @@ if (commentList) {
             try {
                 const data = await requestComment(commentId, "", {
                     method: "PATCH",
-                    headers: {"Content-Type": "application/json"},
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({text: editedText}),
                 });
                 if (data) {
@@ -306,7 +307,7 @@ if (postLikeButton) {
         try {
             const response = await fetch(postLikeButton.dataset.likeUrl, {
                 method: "POST",
-                headers: {"Accept": "application/json"},
+                headers: { "Accept": "application/json" },
             });
 
             if (response.redirected && response.url.includes("/login")) {
@@ -314,7 +315,7 @@ if (postLikeButton) {
                 return;
             }
 
-            const data = await response.json().catch(() => ({}));
+            const data = await parseJson(response);
             if (!response.ok) {
                 throw new Error(data.error || "좋아요를 처리하지 못했습니다.");
             }

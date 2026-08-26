@@ -1,10 +1,8 @@
 :root {
-    --background: #ffffff;
     --surface: #ffffff;
     --text: #17191d;
     --muted: #69717c;
     --line: #e4e8ee;
-    --brand: #1769e8;
     --shadow: 0 14px 36px rgba(29, 42, 62, 0.1);
 }
 
@@ -19,7 +17,6 @@ html {
 body {
     min-height: 100vh;
     margin: 0;
-    
     color: var(--text);
     font-family: Pretendard, "Noto Sans KR", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     -webkit-font-smoothing: antialiased;
@@ -90,26 +87,19 @@ button {
 
 .write-button {
     height: 40px;
-    border: 0;
-    cursor: pointer;
-    transition: background-color 160ms ease, transform 160ms ease;
-}
-
-.write-form {
-    margin: 0;
-}
-
-.write-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     padding: 0 19px;
+    border: 0;
     border-radius: 999px;
     background: var(--text);
     color: #ffffff;
     font-size: 14px;
     font-weight: 750;
     text-decoration: none;
+    cursor: pointer;
+    transition: background-color 160ms ease, transform 160ms ease;
 }
 
 .write-button:hover {
@@ -608,11 +598,13 @@ button {
     align-items: baseline;
     gap: 7px;
 }
+
 .by-text {
     color: #9299a3;
     font-size: 10px;
     font-weight: 400;
 }
+
 .author-info strong,
 .author-info small {
     overflow: hidden;

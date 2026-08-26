@@ -21,7 +21,9 @@
                         class="sort-tab{% if current_sort == 'trending' %} is-active{% endif %}"
                         href="{{ sort_urls['trending'] }}"
                         {% if current_sort == 'trending' %}aria-current="page"{% endif %}
-                    >↗ 트렌딩</a>
+                    >
+                        ↗ 트렌딩
+                    </a>
                     <a
                         class="sort-tab{% if current_sort == 'views' %} is-active{% endif %}"
                         href="{{ sort_urls['views'] }}"
@@ -48,7 +50,9 @@
                         class="sort-tab{% if current_sort == 'latest' %} is-active{% endif %}"
                         href="{{ sort_urls['latest'] }}"
                         {% if current_sort == 'latest' %}aria-current="page"{% endif %}
-                    > ◷ 최신순</a>
+                    >
+                        ◷ 최신순
+                    </a>
                 </nav>
                 <details class="period-filter">
                     <summary>
@@ -61,13 +65,13 @@
                             class="period-option{% if current_period == period %} is-active{% endif %}"
                             href="{{ period_urls[period] }}"
                             {% if current_period == period %}aria-current="page"{% endif %}
-                        >{{ label }}</a>
+                        >
+                            {{ label }}
+                        </a>
                         {% endfor %}
                     </nav>
                 </details>
             </div>
-
-
         </section>
 
         <section
@@ -98,7 +102,7 @@
                 </div>
                 <div class="card-footer">
                     <div class="author-info">
-                        <span class = "by-text">by</span>
+                        <span class="by-text">by</span>
                         <strong>{{ post.author }}</strong>
                     </div>
                     <div class="card-stats">
