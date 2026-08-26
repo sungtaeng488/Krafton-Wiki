@@ -1,32 +1,28 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
     <meta charset="UTF-8">
-    <title>글 상세</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if post %}글 수정{% else %}새 글 작성{% endif %} · KRAFTON WIKI</title>
 </head>
-
 <body>
-
-    {% set hide_login = true %}
     {% include 'navigation_bar.html' %}
+    <h1>{% if post %}글 수정하기{% else %}새 글 작성{% endif %}</h1>
 
-    <h1>글 작성</h1>
-    
     <!-- post 데이터가 있으면 /edit/아이디 로 전송, 없으면 /write 로 전송 -->
-    <form action="{% if post._id %}/edit/{{ post._id }}{% else %}/write{% endif %}" method="POST">
+    <form action="{% if post %}/edit/{{ post._id }}{% else %}/write{% endif %}" method="POST">
         <div>
             <label for="title">제목:</label><br>
-            <input type="text" id="title" name="title" value="{{ post.title if post and post.title else '' }}" required>
+            <input type="text" id="title" name="title" value="{{ post.title if post else '' }}" required>
         </div>
         <br>
-        
+
         <div>
             <label for="content">내용:</label><br>
-            <textarea id="content" name="content" rows="8" cols="50" required>{{ post.content if post and post.content else '' }}</textarea>
+            <textarea id="content" name="content" rows="8" cols="50" required>{{ post.content if post else '' }}</textarea>
         </div>
         <br>
-        
+
         <!-- 태그에 #만 작성시 나오는 flash 메시지 -->
         {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -40,21 +36,21 @@
         <div>
             <label for="tags">태그 (#으로 구분):</label><br>
             <!-- 수정시 이전 tag값에 #추가후 태그칸에 삽입 -->
-            <input type="text" id="tags" name="tags" 
+            <input type="text" id="tags" name="tags"
                    value="{{ post.tags_str if post else '' }}" placeholder="예: #quicksort #algorithm" required>
         </div>
         <br>
-        
+
         <div>
-            <label for="summary">한줄평:</label><br>
-            <input type="text" id="summary" name="summary" style="width: 300px;" value="{{ post.summary if post and post.summary else '' }}">
+            <label for="summary">한줄요약:</label><br>
+            <input type="text" id="summary" name="summary" style="width: 300px;" value="{{ post.summary if post else '' }}">
         </div>
         <br>
-        
-        <button type="submit">{% if post._id %}수정 완료{% else %}DB에 저장하기{% endif %}</button>
-        <button type="button" onclick="location.href='/'">취소</button>
+        <button type="submit">{% if post %}수정 완료{% else %}DB에 저장하기{% endif %}</button>
+        <button
+            type="button"
+            onclick="location.href='{% if post %}{{ url_for('post.view_post', id=post._id) }}{% else %}{{ url_for('main.index') }}{% endif %}'"
+        >취소</button>
     </form>
-
 </body>
-
 </html>
