@@ -1,0 +1,316 @@
+.mypage-shell {
+  width: min(1400px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 50px 0 88px;
+}
+
+.mypage-intro {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 44px;
+}
+
+.mypage-eyebrow {
+  margin: 0 0 12px;
+  color: var(--brand);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.mypage-intro h1 {
+  margin: 0;
+  font-size: clamp(36px, 5vw, 54px);
+  line-height: 1.16;
+  letter-spacing: -0.05em;
+}
+
+.mypage-intro h1 strong {
+  font: inherit;
+}
+
+.mypage-intro > div > p:last-child {
+  margin: 17px 0 0;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.7;
+  letter-spacing: -0.02em;
+}
+
+.write-button {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: 999px;
+  background: var(--text);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 750;
+  text-decoration: none;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+.write-button:hover {
+  background: #34383e;
+  transform: translateY(-1px);
+}
+
+.mypage-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 54px;
+}
+
+.summary-card {
+  min-height: 156px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--surface);
+}
+
+.summary-card span,
+.summary-card small {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.summary-card strong {
+  margin: 7px 0 3px;
+  font-size: 34px;
+  line-height: 1;
+  letter-spacing: -0.045em;
+}
+
+.my-posts {
+  border-top: 1px solid var(--line);
+  padding-top: 28px;
+}
+
+.section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 28px;
+}
+
+.section-heading h2 {
+  margin: 0;
+  font-size: 25px;
+  letter-spacing: -0.035em;
+}
+
+.section-heading p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.post-count {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.my-post-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.my-post-card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: var(--surface);
+  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.my-post-card:hover {
+  border-color: #cbd1d9;
+  box-shadow: var(--shadow);
+  transform: translateY(-3px);
+}
+
+.my-post-card__body {
+  flex: 1;
+  min-height: 210px;
+  padding: 28px;
+}
+
+.my-post-card__meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  color: #9299a3;
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.my-post-card h3 {
+  margin: 18px 0 12px;
+  overflow: hidden;
+  color: #15171a;
+  font-size: 21px;
+  line-height: 1.35;
+  letter-spacing: -0.03em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.my-post-card__body > p {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+  letter-spacing: -0.015em;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 18px;
+}
+
+.tag-list span {
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: #f4f6f8;
+  color: #5e6671;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.my-post-card__actions {
+  min-height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 18px;
+  padding: 12px 28px;
+  border-top: 1px solid #edf0f3;
+  background: #fcfcfd;
+}
+
+.my-post-card__actions a,
+.my-post-card__actions button {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.my-post-card__actions a:hover {
+  color: var(--brand);
+}
+
+.my-post-card__actions button:hover {
+  color: #b42318;
+}
+
+.my-post-card__actions form {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.empty-posts {
+  padding: 70px 24px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: #fcfcfd;
+  text-align: center;
+}
+
+.empty-posts h3 {
+  margin: 0;
+  font-size: 21px;
+  letter-spacing: -0.03em;
+}
+
+.empty-posts p {
+  margin: 10px 0 22px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.empty-posts a {
+  color: var(--brand);
+  font-size: 14px;
+  font-weight: 750;
+  text-decoration: none;
+}
+
+@media (max-width: 900px) {
+  .my-post-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .mypage-shell {
+    width: min(100% - 32px, 1400px);
+    padding: 34px 0 64px;
+  }
+
+  .mypage-intro {
+    align-items: start;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 36px;
+  }
+
+  .mypage-intro > div > p:last-child {
+    font-size: 15px;
+  }
+
+  .mypage-summary,
+  .my-post-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mypage-summary {
+    gap: 14px;
+    margin-bottom: 42px;
+  }
+
+  .summary-card {
+    min-height: 124px;
+    padding: 22px;
+  }
+
+  .my-post-card__body {
+    min-height: 180px;
+    padding: 24px 22px;
+  }
+
+  .my-post-card__actions {
+    padding: 12px 22px;
+  }
+}
