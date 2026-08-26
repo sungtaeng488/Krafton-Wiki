@@ -163,32 +163,26 @@
     cursor: pointer;
 }
 
-.like-button {
-    min-height: 42px;
-    padding: 0 17px;
-    border: 1px solid #dce1e7;
-    background: #ffffff;
-    color: #343940;
+.button-container {
+    display: flex;
+    gap: 8px; /* 좋아요와 싫어요 사이의 간격 */
 }
 
-.like-button:hover {
-    border-color: #aeb5bf;
-    background: #f8f9fa;
-}
-
+.like-button, 
 .dislike-button {
     min-height: 42px;
     padding: 0 17px;
     border: 1px solid #dce1e7;
     background: #ffffff;
     color: #343940;
+    cursor: pointer;
 }
 
+.like-button:hover, 
 .dislike-button:hover {
     border-color: #aeb5bf;
     background: #f8f9fa;
 }
-
 .history-link,
 .edit-link {
     padding: 11px 14px;

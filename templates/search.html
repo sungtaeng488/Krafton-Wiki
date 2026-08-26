@@ -1,93 +1,118 @@
 <!DOCTYPE html>
 <html lang="ko">
-{% set hide_search = true %}
-{% include 'navigation_bar.html' %}
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>검색 - KRAFTON WIKI</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
 </head>
 
 <body>
-    <!-- 검색 내용이 있을 시 검색창 왼쪽위로, 없으면 가운데 -->
-    <div class="{% if search_tag %}top-left-mode{% else %}center-mode{% endif %}">
-        <form class="search-form" action="/search" method="GET">
-            <input type="text" name="tag" placeholder="검색어를 입력하세요" value="{{ search_tag or '' }}">
-            <button type="submit" aria-label="검색">
-                <span class="search-icon" aria-hidden="true"></span>
-            </button>
-        </form>
-    </div>
-    <!-- tag를 검색했을 때 -->
-    {% if search_tag %}
-    <div class="results-area">
-        <!-- 해당하는 글이 있으면 출력 -->
-        {% if posts %}
-        <div style="margin: 20px 0; padding-bottom: 10px; border-bottom: 1px solid #ddd;">
-            <a href="/search?tag={{ search_tag }}&sort=likes"
-                style="margin-right: 15px; text-decoration: none; color: black; {% if current_sort == 'likes' %}font-weight: bold; color: blue;{% endif %}">
-                ❤️ 좋아요순
-            </a>
-            <a href="/search?tag={{ search_tag }}&sort=views"
-                style="margin-right: 15px; text-decoration: none; color: black; {% if current_sort == 'views' %}font-weight: bold; color: blue;{% endif %}">
-                👁️ 조회수순
-            </a>
-            <a href="/search?tag={{ search_tag }}&sort=comments"
-                style="margin-right: 15px; text-decoration: none; color: black; {% if current_sort == 'comments' %}font-weight: bold; color: blue;{% endif %}">
-                💬 댓글순
-            </a>
-            <a href="/search?tag={{ search_tag }}&sort=latest"
-                style="text-decoration: none; color: black; {% if current_sort == 'latest' %}font-weight: bold; color: blue;{% endif %}">
-                🕒 최신순
-            </a>
+    {% set hide_search = true %}
+    {% include 'navigation_bar.html' %}
+
+    <main class="page-shell">
+        <!-- 검색 입력 영역 (검색어 유무에 따른 모드 클래스 적용) -->
+        <div class="{% if search_tag %}top-left-mode{% else %}center-mode{% endif %}">
+            <form class="search-form" action="/search" method="GET">
+                <input type="text" name="tag" placeholder="검색어를 입력하세요" value="{{ search_tag or '' }}">
+                <button type="submit" aria-label="검색">
+                    <span class="search-icon" aria-hidden="true"></span>
+                </button>
+            </form>
         </div>
-        <section class="content-grid" aria-label="CS 지식 콘텐츠 목록">
-            {% for post in posts %}
 
-            <div class="card" data-id="{{ post._id }}" data-likes="{{ post.likes | default(0) }}"
-                data-views="{{ post.views | default(0) }}" data-views-24h="{{ post.views_24h | default('') }}"
-                data-date="{{ post.get('created_at', '') }}">
-                <div class="card-body">
-                    <!-- 제목에 상세 페이지로 가는 링크-->
-                    <h2 class="card-title">
-                        <a href="/post/{{ post._id }}" style="text-decoration: none; color: inherit;">
-                            {{ post.title }}
+        <!-- tag를 검색했을 때 -->
+        {% if search_tag %}
+        <div class="results-area">
+            
+            <!-- 콘텐츠 탐색 영역 (메인 페이지와 동일한 .page-shell 및 .discovery 구조 적용) -->
+            <section class="discovery" aria-label="콘텐츠 탐색" style="margin-top: 20px;">
+                <div class="sort-row">
+                    <nav class="sort-tabs" aria-label="콘텐츠 정렬">
+                        <a class="sort-tab{% if current_sort == 'likes' %} is-active{% endif %}"
+                            href="/search?tag={{ search_tag }}&sort=likes" {% if current_sort=='likes' %}aria-current="page"{% endif %}>
+                            <span class="like-icon" aria-hidden="true">
+                                <span class="like-state like-outline">♡</span>
+                                <span class="like-state like-filled">❤️</span>
+                            </span>
+                            <span>좋아요순</span>
                         </a>
-                    </h2>
+                        <a class="sort-tab{% if current_sort == 'views' %} is-active{% endif %}"
+                            href="/search?tag={{ search_tag }}&sort=views" {% if current_sort=='views' %}aria-current="page"{% endif %}>
+                            <span class="view-icon" aria-hidden="true">
+                                <span class="eye-state eye-closed"></span>
+                                <span class="eye-state eye-open">👁️</span>
+                            </span>
+                            <span>조회수순</span>
+                        </a>
+                        <a class="sort-tab{% if current_sort == 'comments' %} is-active{% endif %}"
+                            href="/search?tag={{ search_tag }}&sort=comments" {% if current_sort=='comments' %}aria-current="page"{% endif %}>
+                            💬 댓글순
+                        </a>
+                        <a class="sort-tab{% if current_sort == 'latest' or not current_sort %} is-active{% endif %}"
+                            href="/search?tag={{ search_tag }}&sort=latest" {% if current_sort=='latest' or not current_sort %}aria-current="page"{% endif %}>
+                            ◷ 최신순
+                        </a>
+                    </nav>
+                </div>
+            </section>
 
-                    <div style="margin-bottom: 10px;">
-                        <small>
-                            {% for tag in post.tags %}
-                            <a href="/search?tag={{ tag }}"
-                                style="color: #007bff; text-decoration: none; margin-right: 5px;">#{{ tag }}</a>
+            <!-- 해당하는 글이 있을 때 -->
+            {% if posts %}
+            <section id="content-grid" class="content-grid{% if current_sort == 'likes' %} is-likes-sort{% endif %}"
+                aria-label="CS 지식 콘텐츠 목록" aria-live="polite">
+                {% for post in posts %}
+                <a class="card" href="{{ url_for('post.view_post', id=post.id) }}" aria-label="{{ post.title }} 상세 보기">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ post.title }}</h2>
+                        <p class="card-summary">{{ post.summary }}</p>
+                        <p class="card-content-preview">{{ post.content | trim }}</p>
+                        <div class="card-tags" aria-label="게시글 태그">
+                            {% for tag in post.tags[:3] %}
+                            <span class="card-tag">#{{ tag }}</span>
                             {% endfor %}
-                        </small>
+                        </div>
+                        <div class="card-meta">
+                            <time datetime="{{ post.created_at.isoformat() }}">{{ post.relative_time }}</time>
+                            <span>💬 {{ post.comment_count }}</span>
+                        </div>
                     </div>
-
-                    <p class="card-summary">{{ post.summary }}</p>
-                </div>
-
-                <div class="card-footer"
-                    style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding-top: 10px; border-top: 1px solid #eee;">
-                    <div class="author-info">
-                        <strong>by {{ post.author }}</strong>
-                        <br>
-                        <small style="color: gray;">{{ post.created_at }}</small>
+                    <div class="card-footer">
+                        <div class="author-info">
+                            <span class="by-text">by</span>
+                            <strong>{{ post.author }}</strong>
+                        </div>
+                        <div class="card-stats">
+                            <span class="card-like-stat">
+                                <span class="card-like-icon" aria-hidden="true">
+                                    <span class="like-state like-outline">♡</span>
+                                    <span class="like-state like-filled">❤️</span>
+                                </span>
+                                <span>{{ post.likes }}</span>
+                            </span>
+                            <span>👁️ {{ post.views }}</span>
+                        </div>
                     </div>
-
-                    <div class="card-stats">
-                        <span style="margin-right: 10px;">❤️ {{ post.likes | default(0) }}</span>
-                        <span style="margin-right: 10px;">💬 {{ post.comments | length if post.comments else 0 }}</span>
-                        <span>👁️ {{ post.views | default(0) }}</span>
-                    </div>
-                </div>
-
+                </a>
+                {% endfor %}
+            </section>
+            
+            <!-- 검색 결과가 없을 때 -->
+            {% else %}
+            <div class="empty-state">
+                <strong>'{{ search_tag }}'에 대한 검색 결과가 없습니다.</strong>
+                <p>다른 검색어나 태그를 입력해 보세요.</p>
             </div>
-            {% endfor %}
-        </section>
+            {% endif %}
+            
+        </div>
         {% endif %}
-    </div>
-    {% endif %}
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 
 </html>
