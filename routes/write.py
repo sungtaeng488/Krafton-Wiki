@@ -1,7 +1,8 @@
-from flask import Flask, request, Blueprint, render_template, flash, redirect, url_for
+from flask import Flask, request, Blueprint, render_template, flash, redirect, url_for, g
 from bson.objectid import ObjectId
 from datetime import datetime
 from .database import db
+from .authority import login_required
 
 write_bp = Blueprint("write", __name__)
 
@@ -23,13 +24,17 @@ def get_post_form_data():
         'content': request.form.get('content'),
         'tags': tags_list,
         'summary': request.form.get('summary'),
-        'likes': 0,         # 기본값 추가
-        'comments': [],      # 기본값 추가
+        'author': g.user_id,
         'current_time': datetime.now().strftime('%Y-%m-%d %H:%M'),
-        'author': request.form.get('author')
+        'likes': 0,         # 기본값 추가
+        'dislikes': 0,      
+        'comments': [],
+        'views':0,
+        'views_24h':[]
     }
 
 @write_bp.route('/write', methods=['GET', 'POST'])       #새 글 작성
+@login_required
 def write():
     if request.method == 'POST':
         form_data = get_post_form_data()
@@ -45,6 +50,7 @@ def write():
     return render_template('write.html')
 
 @write_bp.route('/edit/<id>', methods=['GET', 'POST'])   #글 수정
+@login_required
 def edit(id):
     #GET으로 기존 글 정보 로드
     if request.method == 'GET':

@@ -1,5 +1,6 @@
 from flask import Flask, request, Blueprint, render_template
 from .database import db
+import re
 
 search_bp = Blueprint("search", __name__)
 
@@ -9,9 +10,9 @@ def search():
     search_tag = request.args.get('tag')
     
     if search_tag:
-        posts = list(db.posts.find({'tags': search_tag}))
+        posts = list(db.posts.find({'tags': {'$regex': re.compile(search_tag, re.IGNORECASE)}}))
     else:
-        # 검색어 없으면 전체 글 로드
+        # 검색어 없으면 빈칸
         posts = []
         
     return render_template('search.html', posts=posts, search_tag=search_tag)

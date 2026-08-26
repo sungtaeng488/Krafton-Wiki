@@ -1,5 +1,16 @@
 <!DOCTYPE html>
 <html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>글 상세</title>
+</head>
+
+<body>
+
+    {% set hide_login = true %}
+    {% include 'navigation_bar.html' %}
+
     <h1>{% if post %}글 수정하기{% else %}새 글 작성{% endif %}</h1>
     
     <!-- post 데이터가 있으면 /edit/아이디 로 전송, 없으면 /write 로 전송 -->
@@ -35,13 +46,15 @@
         <br>
         
         <div>
-            <label for="summary">한줄요약:</label><br>
-            <input type="text" id="summary" name="summary" style="width: 300px;" value="{{ post.summary if post else '' }}">
+            <label for="review">한줄평:</label><br>
+            <input type="text" id="review" name="review" style="width: 300px;" value="{{ post.review if post else '' }}">
         </div>
         <br>
-        ##########임시로 작성자명 tester로 고정####################
-        <input type="hidden" name="author" value="tester">
         
         <button type="submit">{% if post %}수정 완료{% else %}DB에 저장하기{% endif %}</button>
         <button type="button" onclick="location.href='/'">취소</button>
     </form>
+
+</body>
+
+</html>
