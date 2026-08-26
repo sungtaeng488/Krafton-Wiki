@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if post %}글 수정{% else %}새 글 작성{% endif %} · KRAFTON WIKI</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    
+    <style>
+        .write-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 40px;
+            background: #ffffff;
+            border: 1px solid #dce1e7;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+        }
+        .write-header {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+        .write-header h1 {
+            margin: 0;
+            font-size: 28px;
+            color: #202428;
+            font-weight: 700;
+        }
+        .write-header p {
+            color: #6c757d;
+            margin-top: 8px;
+            font-size: 15px;
+        }
+        .field {
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+        .field label {
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #343940;
+            font-size: 15px;
+        }
+        .field input[type="text"],
+        .field textarea {
+            padding: 14px;
+            border: 1px solid #dce1e7;
+            border-radius: 8px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: border-color 0.2s ease;
+            background-color: #fafbfc;
+        }
+        .field input[type="text"]:focus,
+        .field textarea:focus {
+            outline: none;
+            border-color: #007bff;
+            background-color: #ffffff;
+        }
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 40px;
+        }
+        .btn-submit {
+            flex: 1;
+            padding: 16px;
+            background: #202428;
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn-submit:hover {
+            background: #343940;
+        }
+        .btn-cancel {
+            flex: 1;
+            padding: 16px;
+            background: #ffffff;
+            color: #343940;
+            border: 1px solid #dce1e7;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            transition: background-color 0.2s;
+        }
+        .btn-cancel:hover {
+            background: #f8f9fa;
+            border-color: #aeb5bf;
+        }
+        .notice--error {
+            color: #d93025;
+            background: #fce8e6;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 24px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navigation_bar.html' %}
+
+    <main class="page-shell">
+        <div class="write-container">
+            <header class="write-header">
+                <h1>{% if post %}글 수정하기{% else %}새 글 작성{% endif %}</h1>
+                <p>나만의 CS 지식을 기록하고 공유해 보세요.</p>
+            </header>
+
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="notice--error" role="alert">
+                        ⚠️ {{ messages[0] }}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            <form action="{% if post %}/edit/{{ post._id }}{% else %}/write{% endif %}" method="POST">
+                
+                <div class="field">
+                    <label for="title">제목</label>
+                    <input type="text" id="title" name="title" value="{{ post.title if post else '' }}" placeholder="글 제목을 입력하세요" required>
+                </div>
+
+                <div class="field">
+                    <label for="content">내용</label>
+                    <textarea id="content" name="content" rows="16" placeholder="자유롭게 지식을 작성해 주세요." required>{{ post.content if post else '' }}</textarea>
+                </div>
+
+                <div class="field">
+                    <label for="tags">태그 (#으로 구분)</label>
+                    <input type="text" id="tags" name="tags" value="{{ post.tags_str if post else '' }}" placeholder="예: #quicksort #algorithm" required>
+                </div>
+
+                <div class="field">
+                    <label for="summary">한줄요약</label>
+                    <input type="text" id="summary" name="summary" value="{{ post.summary if post else '' }}" placeholder="글의 핵심 내용을 한 줄로 요약해 주세요.">
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn-cancel" type="button" onclick="location.href='{% if post %}{{ url_for('post.view_post', id=post._id) }}{% else %}{{ url_for('main.index') }}{% endif %}'">취소</button>
+                    <button class="btn-submit" type="submit">{% if post %}수정 완료{% else %}작성 완료{% endif %}</button>
+                </div>
+
+            </form>
+        </div>
+    </main>
+</body>
+</html>

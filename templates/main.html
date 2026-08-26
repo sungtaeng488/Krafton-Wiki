@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="함께 기록하고 성장하는 CS 지식 커뮤니티, KRAFTON WIKI">
+    <title>KRAFTON WIKI</title>
+</head>
+<body>
+    {% include 'navigation_bar.html' %}
+    <main class="page-shell">
+        <section class="intro" aria-labelledby="page-title">
+            <h1 id="page-title">함께 채워가는 CS 지식</h1>
+            <p>개념을 정리하고, 경험을 나누며, 서로의 지식을 연결해 보세요.</p>
+        </section>
+
+        <section class="discovery" aria-label="콘텐츠 탐색">
+            <div class="sort-row">
+                <nav class="sort-tabs" aria-label="콘텐츠 정렬">
+                    <a
+                        class="sort-tab{% if current_sort == 'trending' %} is-active{% endif %}"
+                        href="{{ sort_urls['trending'] }}"
+                        {% if current_sort == 'trending' %}aria-current="page"{% endif %}
+                    >↗ 트렌딩</a>
+                    <a
+                        class="sort-tab{% if current_sort == 'views' %} is-active{% endif %}"
+                        href="{{ sort_urls['views'] }}"
+                        {% if current_sort == 'views' %}aria-current="page"{% endif %}
+                    >
+                        <span class="view-icon" aria-hidden="true">
+                            <span class="eye-state eye-closed"></span>
+                            <span class="eye-state eye-open">👁️</span>
+                        </span>
+                        <span>조회수 순</span>
+                    </a>
+                    <a
+                        class="sort-tab{% if current_sort == 'likes' %} is-active{% endif %}"
+                        href="{{ sort_urls['likes'] }}"
+                        {% if current_sort == 'likes' %}aria-current="page"{% endif %}
+                    >
+                        <span class="like-icon" aria-hidden="true">
+                            <span class="like-state like-outline">♡</span>
+                            <span class="like-state like-filled">❤️</span>
+                        </span>
+                        <span>좋아요 순</span>
+                    </a>
+                    <a
+                        class="sort-tab{% if current_sort == 'latest' %} is-active{% endif %}"
+                        href="{{ sort_urls['latest'] }}"
+                        {% if current_sort == 'latest' %}aria-current="page"{% endif %}
+                    > ◷ 최신순</a>
+                </nav>
+                <details class="period-filter">
+                    <summary>
+                        <span>{{ period_labels[current_period] }}</span>
+                        <span class="period-arrow" aria-hidden="true"></span>
+                    </summary>
+                    <nav class="period-menu" aria-label="콘텐츠 기간">
+                        {% for period, label in period_labels.items() %}
+                        <a
+                            class="period-option{% if current_period == period %} is-active{% endif %}"
+                            href="{{ period_urls[period] }}"
+                            {% if current_period == period %}aria-current="page"{% endif %}
+                        >{{ label }}</a>
+                        {% endfor %}
+                    </nav>
+                </details>
+            </div>
+
+
+        </section>
+
+        <section
+            id="content-grid"
+            class="content-grid{% if current_sort == 'likes' %} is-likes-sort{% endif %}"
+            aria-label="CS 지식 콘텐츠 목록"
+            aria-live="polite"
+        >
+            {% for post in posts %}
+            <a
+                class="card"
+                href="{{ url_for('post.view_post', id=post.id) }}"
+                aria-label="{{ post.title }} 상세 보기"
+            >
+                <div class="card-body">
+                    <h2 class="card-title">{{ post.title }}</h2>
+                    <p class="card-summary">{{ post.summary }}</p>
+                    <p class="card-content-preview">{{ post.content | trim }}</p>
+                    <div class="card-tags" aria-label="게시글 태그">
+                        {% for tag in post.tags[:3] %}
+                        <span class="card-tag">#{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="card-meta">
+                        <time datetime="{{ post.created_at.isoformat() }}">{{ post.relative_time }}</time>
+                        <span>💬 {{ post.comment_count }}</span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="author-info">
+                        <span class = "by-text">by</span>
+                        <strong>{{ post.author }}</strong>
+                    </div>
+                    <div class="card-stats">
+                        <span class="card-like-stat">
+                            <span class="card-like-icon" aria-hidden="true">
+                                <span class="like-state like-outline">♡</span>
+                                <span class="like-state like-filled">❤️</span>
+                            </span>
+                            <span>{{ post.likes }}</span>
+                        </span>
+                        <span>👁️ {{ post.views }}</span>
+                    </div>
+                </div>
+            </a>
+            {% else %}
+            <div class="empty-state">
+                <strong>해당 기간에 작성된 글이 없습니다.</strong>
+                <p>다른 기간을 선택하면 더 많은 CS 지식을 확인할 수 있어요.</p>
+            </div>
+            {% endfor %}
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+<header class="site-header">
+    <div class="header-inner">
+        <a class="brand" href="/" aria-label="KRAFTON WIKI 홈">
+            <span>KRAFTON WIKI</span>
+        </a>
+
+        <div class="header-actions">
+            {% if not hide_search %}
+            <a class="icon-button" href="{{ url_for('search.search') }}" aria-label="검색">
+                <span class="search-icon" aria-hidden="true"></span>
+            </a>
+            {% endif %}
+
+            {% if load_user_id %}
+            <a class="login-button" href="{{ url_for('mypage.mypage') }}">마이페이지</a>
+            <form class="logout-form" method="POST" action="{{ url_for('auth.logout') }}">
+                <button class="logout-button" type="submit">로그아웃</button>
+            </form>
+            {% else %}
+                {% if not hide_login %}
+                <a class="login-button" href="{{ url_for('auth.login') }}">로그인</a>
+                {% endif %}
+            {% endif %}
+            {% if g.user_id %}
+                <a class="write-button" href="{{ url_for('write.write') }}">글 작성</a>
+            {% endif %}
+        </div>
+    </div>
+</header>

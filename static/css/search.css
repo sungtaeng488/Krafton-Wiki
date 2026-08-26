@@ -1,0 +1,87 @@
+/* 브라우저 기본 여백 제거 */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.center-mode {
+    display: flex;
+    justify-content: center;
+    /* 가로 중앙 */
+    align-items: center;
+    /* 세로 중앙 */
+    height: 80vh;
+}
+
+/* 검색 후: 왼쪽 위로 이동 */
+.top-left-mode {
+    display: flex;
+    justify-content: flex-start;
+    /* 가로 왼쪽 정렬 */
+    margin-top: 30px;
+    /* 위쪽 여백 */
+    padding-left: 30px;
+    /* 왼쪽 여백 */
+}
+
+.search-form {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 600px;
+    /* 크기 고정 */
+    border: 2px solid #ddd;
+    border-radius: 30px;
+    overflow: hidden;
+    background-color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-form input[type="text"] {
+    flex: 1;
+    border: none;
+    padding: 15px 25px;
+    font-size: 18px;
+    outline: none;
+}
+
+.search-form .search-icon {
+    position: relative;
+    width: 17px;
+    height: 17px;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+}
+
+.search-form .search-icon::after {
+    content: "";
+    position: absolute;
+    right: -5px;
+    bottom: -3px;
+    width: 7px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    transform: rotate(45deg);
+}
+
+.search-form button {
+    background-color: transparent;
+    border: none;
+    padding: 15px 25px;
+    cursor: pointer;
+    font-size: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.search-form button:hover {
+    background-color: #f1f1f1;
+}
+
+
+.results-area {
+    padding-left: 30px;
+    /* 검색창이 왼쪽 위로 갔을 때 줄을 맞추기 위한 여백 */
+}
