@@ -40,7 +40,7 @@ def write():
             return render_template('write.html', post=form_data)
         
         db.posts.insert_one(form_data)
-        return redirect(url_for('main'))
+        return redirect(url_for('main.index'))
         
     return render_template('write.html')
 
@@ -73,4 +73,4 @@ def edit(id):
                 'summary': form_data['summary']
             }}
 )
-        return redirect(url_for('main'))
+        return redirect(url_for('search.search'))

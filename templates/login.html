@@ -1,53 +1,62 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content=""width=device-width, initial-scale="1.0">
+  <meta name="viewport" content="" width=device-width, initial-scale="1.0">
   <title>Log In</title>
 
   <style type="text/css">
     body {
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      /* 헤더는 위로, 폼은 아래로 수직 배치 */
+    }
+
+    .login-container {
+      flex: 1;
+      /* 남은 화면 전체를 차지 */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      /* 세로 중앙 정렬 */
+      align-items: center;
+      /* 가로 중앙 정렬 */
     }
   </style>
 </head>
+
 <body>
-  <h1>로그인</h1>
+  {% set hide_search = true %}
+  {% include 'navigation_bar.html' %}
+  <div class="login-container">
+    <h1>로그인</h1>
 
-  {% if error %}
+    {% if error %}
     <p style="color: red;">{{ error }}</p>
-  {% endif %}
+    {% endif %}
 
-  {% if registered %}
+    {% if registered %}
     <p style="color: green;">회원가입이 완료되었습니다. 로그인해주세요.</p>
-  {% endif %}
+    {% endif %}
 
-  <form method="POST" action="{{ url_for('auth.login') }}">
-    <input
-      type="text"
-      name="id_give"
-      placeholder="아이디"
-      required
-    >
+    <form method="POST" action="{{ url_for('auth.login') }}">
+      <input type="text" name="id_give" placeholder="아이디" required>
 
-    <br>
+      <br>
 
-    <input
-      type="password"
-      name="password_give"
-      placeholder="비밀번호"
-      required
-    >
+      <input type="password" name="password_give" placeholder="비밀번호" required>
 
-    <br>
+      <br>
 
-    <button type="submit">로그인</button>
-  </form>
+      <button type="submit">로그인</button>
+    </form>
 
-  <p><a href="{{ url_for('auth.signup') }}">회원가입</a></p>
-  <p><a href="{{ url_for('main.index') }}">메인페이지</a></p>
+    <p><a href="{{ url_for('auth.signup') }}">회원가입</a></p>
+    <p><a href="{{ url_for('main.index') }}">메인페이지</a></p>
+  </div>
 </body>
+
 </html>

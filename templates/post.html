@@ -1,4 +1,5 @@
-{% block content %}
+<!DOCTYPE html>
+<html lang="ko">
     <!--글 상세 내용 -->
     <h1>{{ post.title }}</h1>
     <p><small>
@@ -13,7 +14,7 @@
     <div style="min-height: 150px; white-space: pre-wrap;">{{ post.content }}</div>
     
     <hr>
-    <p><strong>한줄평:</strong> {{ post.review }}</p>
+    <p><strong>한줄요약:</strong> {{ post.summary }}</p>
 
     <!-- 좋아요 버튼 -->
     <form action="/like/{{ post._id }}" method="POST" style="margin-bottom: 20px;">
@@ -43,4 +44,3 @@
     <!-- 수정 및 목록으로 돌아가기 버튼 -->
     <button onclick="location.href='/edit/{{ post._id }}'">글 수정하기</button>
     <button onclick="location.href='/'">목록으로</button>
-{% endblock %}
