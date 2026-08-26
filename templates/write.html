@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <h1>{% if post %}글 수정하기{% else %}새 글 작성{% endif %}</h1>
+
+    <!-- post 데이터가 있으면 /edit/아이디 로 전송, 없으면 /write 로 전송 -->
+    <form action="{% if post %}/edit/{{ post._id }}{% else %}/write{% endif %}" method="POST">
+        <div>
+            <label for="title">제목:</label><br>
+            <input type="text" id="title" name="title" value="{{ post.title if post else '' }}" required>
+        </div>
+        <br>
+
+        <div>
+            <label for="content">내용:</label><br>
+            <textarea id="content" name="content" rows="8" cols="50" required>{{ post.content if post else '' }}</textarea>
+        </div>
+        <br>
+
+        <!-- 태그에 #만 작성시 나오는 flash 메시지 -->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div style="color: red; margin-bottom: 15px; font-weight: bold;">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+
+        <div>
+            <label for="tags">태그 (#으로 구분):</label><br>
+            <!-- 수정시 이전 tag값에 #추가후 태그칸에 삽입 -->
+            <input type="text" id="tags" name="tags"
+                   value="{{ post.tags_str if post else '' }}" placeholder="예: #quicksort #algorithm" required>
+        </div>
+        <br>
+
+        <div>
+            <label for="summary">한줄요약:</label><br>
+            <input type="text" id="summary" name="summary" style="width: 300px;" value="{{ post.summary if post else '' }}">
+        </div>
+        <br>
+        ##########임시로 작성자명 tester로 고정####################
+        <input type="hidden" name="author" value="tester">
+
+        <button type="submit">{% if post %}수정 완료{% else %}DB에 저장하기{% endif %}</button>
+        <button type="button" onclick="location.href='/'">취소</button>
+    </form>

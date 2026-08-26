@@ -5,24 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="함께 기록하고 성장하는 CS 지식 커뮤니티, KRAFTON WIKI">
     <title>KRAFTON WIKI</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
-    <header class="site-header">
-        <div class="header-inner">
-            <a class="brand" href="/" aria-label="KRAFTON WIKI 홈">
-                <span>KRAFTON WIKI</span>
-            </a>
-
-            <div class="header-actions">
-                <button class="icon-button" type="button" aria-label="검색">
-                    <span class="search-icon" aria-hidden="true"></span>
-                </button>
-                <button class="login-button" type="button">로그인</button>
-            </div>
-        </div>
-    </header>
-
+    {% include 'navigation_bar.html' %}
     <main class="page-shell">
         <section class="intro" aria-labelledby="page-title">
             <h1 id="page-title">함께 채워가는 CS 지식</h1>
@@ -94,7 +79,9 @@
             {% for post in posts %}
             <div class="card">
                 <div class="card-body">
-                    <h2 class="card-title">{{ post.title }}</h2>
+                    <a class="card-title-link" href="{{ url_for('post.view_post', id=post.id) }}">
+                        <h2 class="card-title">{{ post.title }}</h2>
+                    </a>
                     <p class="card-summary">{{ post.summary }}</p>
                     <p class="card-content-preview">{{ post.content | trim }}</p>
                     <div class="card-tags" aria-label="게시글 태그">
@@ -104,7 +91,7 @@
                     </div>
                     <div class="card-meta">
                         <time datetime="{{ post.created_at.isoformat() }}">{{ post.relative_time }}</time>
-                        <span>💬 {{ post.comments }}</span>
+                        <span>💬 {{ post.comment_count }}</span>
                     </div>
                 </div>
                 <div class="card-footer">
