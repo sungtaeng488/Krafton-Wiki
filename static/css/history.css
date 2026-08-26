@@ -116,17 +116,23 @@ body {
 }
 
 .history-item > span {
+    display: block;
+    margin-top: 7px;
     color: var(--history-muted);
     font-size: 12px;
 }
 
-.history-item > span {
-    display: block;
-    margin-top: 7px;
-}
-
 .history-preview {
     min-width: 0;
+    transition: opacity 160ms ease;
+}
+
+.history-preview.is-updating {
+    opacity: 0.45;
+}
+
+.history-preview.is-entering {
+    opacity: 0;
 }
 
 .version-notice {
@@ -265,5 +271,10 @@ body {
         width: min(100% - 32px, 1180px);
         padding-top: 30px;
     }
+}
 
+@media (prefers-reduced-motion: reduce) {
+    .history-preview {
+        transition-duration: 0.01ms;
+    }
 }

@@ -30,6 +30,7 @@
     letter-spacing: -0.055em;
     overflow-wrap: anywhere;
 }
+
 .history-link {
     display: inline-flex;
     align-items: center;
@@ -150,7 +151,14 @@
     margin: 0;
 }
 
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
 .like-button,
+.dislike-button,
 .history-link,
 .edit-link,
 .delete-post-button,
@@ -162,17 +170,57 @@
     cursor: pointer;
 }
 
-.like-button {
+.like-button,
+.dislike-button {
     min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
     padding: 0 17px;
     border: 1px solid #dce1e7;
     background: #ffffff;
     color: #343940;
+    text-decoration: none;
+    transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease;
 }
 
-.like-button:hover {
+.like-button:hover,
+.dislike-button:hover {
     border-color: #aeb5bf;
     background: #f8f9fa;
+}
+
+.like-heart,
+.dislike-button [data-post-dislike-heart],
+.comment-like-heart {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 18px;
+    width: 18px;
+    height: 18px;
+    font-size: 20px;
+    line-height: 1;
+    transition: transform 150ms ease;
+}
+
+.like-heart.is-liked,
+.comment-like-heart.is-liked {
+    font-size: 13px;
+}
+
+.dislike-button.is-disliked {
+    border-color: #e07a7a;
+    background: #fff4f4;
+    color: #9c2c2c;
+}
+
+.like-button.is-updating,
+.like-button:disabled,
+.dislike-button.is-updating,
+.dislike-button:disabled {
+    cursor: wait;
 }
 
 .history-link,
@@ -384,6 +432,9 @@
 }
 
 .comment-like {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
     margin-right: 4px;
 }
 

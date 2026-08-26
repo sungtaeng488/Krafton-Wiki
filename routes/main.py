@@ -4,6 +4,7 @@ from zoneinfo import ZoneInfo
 from flask import Blueprint, render_template, url_for
 
 from db import get_database
+from db.post_views import get_views_24h_by_post
 
 
 main_bp = Blueprint("main", __name__)
@@ -99,8 +100,12 @@ def filter_posts(posts, period):
 
 
 def get_sorted_posts(sort_type, period):
+    loaded_posts = load_posts()
+    views_24h_by_post = get_views_24h_by_post(
+        [post["_id"] for post in loaded_posts if post.get("_id")]
+    )
     posts = []
-    for post in load_posts():
+    for post in loaded_posts:
         comments = post.get("comments", 0)
         posts.append(
             {
@@ -111,7 +116,7 @@ def get_sorted_posts(sort_type, period):
                 "tags": post.get("tags", []),
                 "likes": post.get("likes", 0),
                 "views": post.get("views", 0),
-                "views_24h": post.get("views_24h", 0),
+                "views_24h": views_24h_by_post.get(post.get("_id"), 0),
                 "comment_count": (
                     len(comments) if isinstance(comments, list) else comments
                 ),
@@ -133,21 +138,21 @@ def get_sorted_posts(sort_type, period):
 
 def render_index(sort_type, period):
     sort_urls = {
-    name: url_for(
-        "main.filtered_index",
-        sort_type=name,
-        period=period
-    )
-    for name in SORT_KEYS
-}
+        name: url_for(
+            "main.filtered_index",
+            sort_type=name,
+            period=period,
+        )
+        for name in SORT_KEYS
+    }
     period_urls = {
-    name: url_for(
-        "main.filtered_index",
-        sort_type=sort_type,
-        period=name
-    )
-    for name in PERIOD_LABELS
-}
+        name: url_for(
+            "main.filtered_index",
+            sort_type=sort_type,
+            period=name,
+        )
+        for name in PERIOD_LABELS
+    }
 
     return render_template(
         "main.html",
