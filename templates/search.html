@@ -65,7 +65,7 @@
             <section id="content-grid" class="content-grid{% if current_sort == 'likes' %} is-likes-sort{% endif %}"
                 aria-label="CS 지식 콘텐츠 목록" aria-live="polite">
                 {% for post in posts %}
-                <a class="card" href="{{ url_for('post.view_post', id=post.id) }}" aria-label="{{ post.title }} 상세 보기">
+                <a class="card" href="{{ url_for('post.view_post', id=post._id) }}" aria-label="{{ post.title }} 상세 보기">
                     <div class="card-body">
                         <h2 class="card-title">{{ post.title }}</h2>
                         <p class="card-summary">{{ post.summary }}</p>
