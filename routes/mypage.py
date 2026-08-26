@@ -22,6 +22,11 @@ def mypage():
     # 유저가 작성한 포스트만 조회
     posts = list(get_posts_collection().find({"user_id": g.user_id}))
     for post in posts:
+        comments = post.get("comments", [])
+        post["comment_count"] = (
+            len(comments) if isinstance(comments, list) else comments or 0
+        )
+
         created_at = post.get("created_at")
         if isinstance(created_at, datetime):
             if created_at.tzinfo is None:

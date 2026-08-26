@@ -233,6 +233,12 @@ document.addEventListener("DOMContentLoaded", () => {
         replaceMainContent(window.location.href, false);
     });
 
+    window.addEventListener("pageshow", (event) => {
+        if (event.persisted) {
+            replaceMainContent(window.location.href, false);
+        }
+    });
+
     window.addEventListener("resize", initializeIndicator);
     initializeIndicator();
 });
