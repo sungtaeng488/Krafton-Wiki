@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
         requestAnimationFrame(() => tabList.classList.add("is-ready"));
     };
 
-    const showSelectedTab = (selectedTab) => {
+    const activateSortTab = (selectedTab) => {
         const tabList = selectedTab.closest(".sort-tabs");
 
         if (!tabList) {
@@ -85,6 +85,31 @@ document.addEventListener("DOMContentLoaded", () => {
         });
 
         moveIndicator(tabList, selectedTab);
+    };
+
+    const syncSortControls = (currentSortRow, nextSortRow) => {
+        const currentTabs = [...currentSortRow.querySelectorAll(".sort-tab")];
+        const nextTabs = [...nextSortRow.querySelectorAll(".sort-tab")];
+        const nextActiveIndex = nextTabs.findIndex((tab) =>
+            tab.classList.contains("is-active"),
+        );
+
+        currentTabs.forEach((tab, index) => {
+            const nextTab = nextTabs[index];
+            if (nextTab) {
+                tab.href = nextTab.href;
+            }
+        });
+
+        if (nextActiveIndex >= 0 && currentTabs[nextActiveIndex]) {
+            activateSortTab(currentTabs[nextActiveIndex]);
+        }
+
+        const currentPeriodFilter = currentSortRow.querySelector(".period-filter");
+        const nextPeriodFilter = nextSortRow.querySelector(".period-filter");
+        if (currentPeriodFilter && nextPeriodFilter) {
+            currentPeriodFilter.replaceWith(nextPeriodFilter);
+        }
     };
 
     const replaceMainContent = async (url, shouldPushHistory = true) => {
@@ -125,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             nextGrid.classList.add("is-entering");
-            currentSortRow.replaceWith(nextSortRow);
+            syncSortControls(currentSortRow, nextSortRow);
             currentGrid.replaceWith(nextGrid);
             document.title = nextDocument.title;
 
@@ -133,7 +158,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 window.history.pushState({}, "", url);
             }
 
-            initializeIndicator();
             window.scrollTo(0, savedScrollY);
 
             requestAnimationFrame(() => {
@@ -174,7 +198,7 @@ document.addEventListener("DOMContentLoaded", () => {
         link.closest("details")?.removeAttribute("open");
 
         if (link.classList.contains("sort-tab")) {
-            showSelectedTab(link);
+            activateSortTab(link);
         }
 
         if (nextUrl.href === window.location.href) {
