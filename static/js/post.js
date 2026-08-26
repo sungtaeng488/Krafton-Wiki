@@ -365,9 +365,8 @@ if (postDislikeButton) {
                 throw new Error(data.error || "싫어요를 처리하지 못했습니다.");
             }
 
-            postDislikeButton.classList.toggle("is-disliked", data.is_disliked);
             const heart = postDislikeButton.querySelector("[data-post-dislike-heart]");
-            heart.textContent = data.is_disliked ? "👎" : "♡";
+            heart.textContent = data.is_disliked ? "👎" : "✖";
             document.querySelectorAll("[data-post-dislike-count]").forEach((element) => {
                 element.textContent = String(data.dislikes);
             });

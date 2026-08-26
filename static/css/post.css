@@ -210,12 +210,6 @@
     font-size: 13px;
 }
 
-.dislike-button.is-disliked {
-    border-color: #e07a7a;
-    background: #fff4f4;
-    color: #9c2c2c;
-}
-
 .like-button.is-updating,
 .like-button:disabled,
 .dislike-button.is-updating,

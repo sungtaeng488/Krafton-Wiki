@@ -60,9 +60,7 @@
             </aside>
             {% endif %}
 
-            <section class="post-content" aria-label="게시글 내용">
-                {{ post.content | default('', true) }}
-            </section>
+            <section class="post-content" aria-label="게시글 내용">{{ post.content | default('', true) }}</section>
 
             <footer class="post-actions">
                 {% if load_user_id %}
@@ -85,7 +83,7 @@
                         data-post-dislike
                         data-dislike-url="{{ url_for('post.dislike_post', id=post._id) }}"
                     >
-                        <span data-post-dislike-heart aria-hidden="true">{% if post.is_disliked %}👎{% else %}♡{% endif %}</span>
+                        <span data-post-dislike-heart aria-hidden="true">{% if post.is_disliked %}👎{% else %}✖{% endif %}</span>
                         <span>싫어요</span>
                         <span data-post-dislike-count>{{ post.dislikes | default(0) }}</span>
                     </button>
