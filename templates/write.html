@@ -11,7 +11,7 @@
     {% set hide_login = true %}
     {% include 'navigation_bar.html' %}
 
-    <h1>{% if post %}글 수정하기{% else %}새 글 작성{% endif %}</h1>
+    <h1>글 작성</h1>
     
     <!-- post 데이터가 있으면 /edit/아이디 로 전송, 없으면 /write 로 전송 -->
     <form action="{% if post %}/edit/{{ post._id }}{% else %}/write{% endif %}" method="POST">
