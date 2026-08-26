@@ -95,3 +95,12 @@
     <script src="{{ url_for('static', filename='js/history.js') }}"></script>
 </body>
 </html>
+
+<script>
+    window.addEventListener('pageshow', function (event) {
+        // event.persisted는 페이지가 브라우저 캐시에서 로드되었을 때 true
+        if (event.persisted) {
+            window.location.reload();
+        }
+    });
+</script>

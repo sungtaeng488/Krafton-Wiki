@@ -77,6 +77,7 @@ def login_required(view):
                 redirect(url_for("auth.login", next=request.full_path))
             )
             response.delete_cookie("access_token")  # 쿠키 삭제
+            response.headers["Cache-Control"] = "no-store" # 뒤로가기
             return response
 
         return view(*args, **kwargs)
