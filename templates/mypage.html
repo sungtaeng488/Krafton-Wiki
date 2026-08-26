@@ -10,13 +10,13 @@
   <p>{{ user_id }}님이 작성한 글</p>
   <p>게시글 수 : {{ posts|length}}</p>
   <p>받은 뱃지, 모든 좋야요 수, 평균 평점</p>
-  <p><a href="{{ url_for('mypage.create_post') }}">새 글 작성</a></p>
+  <p><a href="{{ url_for('write.write') }}">새 글 작성</a></p>
 
 {% for post in posts %}
   <article>
     <h2>{{ post.title }}</h2>
 
-    <a href="{{ url_for('mypage.update_post', post_id=post._id) }}">
+    <a href="{{ url_for('write.edit', id=post._id) }}">
       수정
     </a>
 

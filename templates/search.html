@@ -40,7 +40,11 @@
                             💬: {{ post.comments | length if post.comments else 0 }}
                         </small><br>
                         
-                        <button onclick="location.href='/edit/{{ post._id }}'">수정</button>
+                        {% if load_user_id and post.user_id == load_user_id %}
+                            <button onclick="location.href='/edit/{{ post._id }}'">
+                            수정
+                            </button>
+                        {% endif %}
                     </li>
                 {% endfor %}
                 </ul>
