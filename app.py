@@ -18,7 +18,7 @@ app.config["JWT_SECRET_KEY"] = os.environ.get(
 )
 app.config["JWT_EXPIRES_MINUTES"] = 60
 app.config["JWT_COOKIE_SECURE"] = (
-    os.environ.get("JWT_COOKIE_SECURE", "false").lower() == "true"
+    os.environ.get("JWT_COOKIE_SECURE", "false").lower() == "true"  # .env의 문자열을 bool값으로 변환
 )
 
 register_blueprints(app)
