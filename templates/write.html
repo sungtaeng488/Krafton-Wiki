@@ -43,7 +43,7 @@
 
                 <div class="field">
                     <label for="tags">태그 (#으로 구분)</label>
-                    <input type="text" id="tags" name="tags" value="{{ post.tags_str if post else '' }}" placeholder="예: #quicksort #algorithm" required>
+                    <input type="text" id="tags" name="tags" value="{{ post.tags_str if post else '' }}" minlength="2"placeholder="예: #quicksort #algorithm" required>
                 </div>
 
                 
